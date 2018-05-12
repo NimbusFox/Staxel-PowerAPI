@@ -11,55 +11,33 @@ using Staxel.Collections;
 using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Tiles;
+using Staxel.Translation;
 
 namespace NimbusFox.PowerAPI.Items {
     public class BatteryItem : ChargeableItem {
 
         private readonly BatteryItemBuilder _builder;
 
-        private bool _chargeInventory;
+        public bool ChargeInventory { get; private set; }
 
         public BatteryItem(BatteryItemBuilder builder, ItemConfiguration config) : base(builder, config) {
             _builder = builder;
-            Configuration = config;
 
             if (HasAssociatedToolComponent(Configuration.Components)) {
                 var component = Configuration.Components.Get<BatteryComponent>();
-                _chargeInventory = component.ChargeInventory;
+                ChargeInventory = component.ChargeInventory;
             }
         }
 
         public override void Update(Entity entity, Timestep step, EntityUniverseFacade entityUniverseFacade) {
-            if (_chargeInventory) {
-                var transfered = 0L;
+        }
 
-                for (var i = 0; i < entity.Inventory.SlotCount(); i++) {
-                    var currentStack = entity.Inventory.GetItemStack(i);
-
-                    if (!currentStack.IsNull()) {
-                        if (currentStack.SingularItem() != NullItem) {
-                            var item = currentStack.SingularItem();
-
-                            if (item is ChargeableItem chargeable) {
-                                if (item is BatteryItem == false) {
-                                    var newCharge = chargeable.CurrentWatts + (chargeable.TransferRate - transfered);
-                                    if (newCharge > chargeable.MaxWatts) {
-                                        chargeable.CurrentWatts = chargeable.MaxWatts;
-                                        transfered += newCharge - chargeable.MaxWatts;
-                                    } else {
-                                        transfered = TransferRate;
-                                        chargeable.CurrentWatts = newCharge;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (transfered == TransferRate) {
-                        break;
-                    }
-                }
+        public long GetTransferOut() {
+            if (CurrentWatts >= TransferRate.Out) {
+                return TransferRate.Out;
             }
+
+            return CurrentWatts;
         }
 
         public override void Control(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) { }
@@ -68,7 +46,7 @@ namespace NimbusFox.PowerAPI.Items {
             base.AssignFrom(item);
 
             if (item is BatteryItem battery) {
-                _chargeInventory = battery._chargeInventory;
+                ChargeInventory = battery.ChargeInventory;
             }
         }
 

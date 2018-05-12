@@ -13,7 +13,7 @@ namespace NimbusFox.PowerAPI.Items.Builders {
 
         public void Dispose() { }
         public void Load() { }
-        public Item Build(Blob blob, ItemConfiguration configuration, Item spare) {
+        public virtual Item Build(Blob blob, ItemConfiguration configuration, Item spare) {
             if (spare is ChargeableItem) {
                 if (spare.Configuration != null) {
                     spare.Restore(configuration, blob);
@@ -21,12 +21,12 @@ namespace NimbusFox.PowerAPI.Items.Builders {
                 }
             }
 
-            var batteryItem = new ChargeableItem(this, configuration);
-            batteryItem.Restore(configuration, blob);
-            return batteryItem;
+            var chargeableItem = new ChargeableItem(this, configuration);
+            chargeableItem.Restore(configuration, blob);
+            return chargeableItem;
         }
 
-        public string Kind() {
+        public virtual string Kind() {
             return "nimbusfox.item.chargeable";
         }
     }

@@ -8,11 +8,11 @@ using Staxel.Items;
 
 namespace NimbusFox.PowerAPI.Components.Builders {
     public class ChargeableComponentBuilder : IItemComponentBuilder {
-        public string Kind() {
+        public virtual string Kind() {
             return "chargeable";
         }
 
-        public object Instance(BaseItemConfiguration item, Blob config) {
+        public virtual object Instance(BaseItemConfiguration item, Blob config) {
             return new ChargeableComponent(config);
         }
     }

@@ -9,7 +9,7 @@ using Staxel.Items;
 namespace NimbusFox.PowerAPI.Items.Builders {
     public class BatteryItemBuilder : ChargeableItemBuilder {
 
-        public new Item Build(Blob blob, ItemConfiguration configuration, Item spare) {
+        public override Item Build(Blob blob, ItemConfiguration configuration, Item spare) {
             if (spare is BatteryItem) {
                 if (spare.Configuration != null) {
                     spare.Restore(configuration, blob);
@@ -22,7 +22,7 @@ namespace NimbusFox.PowerAPI.Items.Builders {
             return batteryItem;
         }
 
-        public new string Kind() {
+        public override string Kind() {
             return "nimbusfox.item.battery";
         }
     }

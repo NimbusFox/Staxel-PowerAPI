@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Items.Builders;
 using Plukit.Base;
+using Staxel;
 using Staxel.Client;
 using Staxel.Collections;
 using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Tiles;
+using Staxel.Translation;
 
 namespace NimbusFox.PowerAPI.Items {
     public class ChargeableItem : Item {
@@ -19,7 +22,8 @@ namespace NimbusFox.PowerAPI.Items {
         internal long MaxWatts { get; private set; }
         internal long CurrentWatts;
         private Dictionary<string, string> _chargeModels;
-        internal long TransferRate { get; private set; }
+        internal TransferRate TransferRate { get; private set; }
+        private string DescriptionCode { get; set; }
 
         public ChargeableItem(ChargeableItemBuilder builder, ItemConfiguration config) : base(builder.Kind()) {
             _builder = builder;
@@ -31,6 +35,7 @@ namespace NimbusFox.PowerAPI.Items {
                 MaxWatts = component.MaxWatts;
                 _chargeModels = component.ChargeModels;
                 TransferRate = component.TransferRate;
+                DescriptionCode = component.DescriptionCode;
             }
         }
         public override void Update(Entity entity, Timestep step, EntityUniverseFacade entityUniverseFacade) { }
@@ -42,7 +47,16 @@ namespace NimbusFox.PowerAPI.Items {
                 CurrentWatts = charge.CurrentWatts;
                 _chargeModels = charge._chargeModels;
                 TransferRate = charge.TransferRate;
+                DescriptionCode = charge.DescriptionCode;
             }
+        }
+
+        public long GetTransferIn(long incoming) {
+            if (incoming > TransferRate.In) {
+                return TransferRate.In;
+            }
+
+            return incoming;
         }
 
         public override bool PlacementTilePreview(AvatarController avatar, Entity entity, Universe universe, Vector3IMap<Tile> previews) {
@@ -63,6 +77,12 @@ namespace NimbusFox.PowerAPI.Items {
 
         public override void Restore(ItemConfiguration configuration, Blob blob) {
             CurrentWatts = blob.GetLong("currentWatts", 0);
+        }
+
+        public override string GetItemDescription(LanguageDatabase lang) {
+            var text = lang.GetTranslationString(DescriptionCode);
+
+            return string.Format(text, CurrentWatts, MaxWatts, TransferRate.In, TransferRate.Out);
         }
     }
 }
