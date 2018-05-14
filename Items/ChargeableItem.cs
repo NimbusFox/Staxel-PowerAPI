@@ -32,7 +32,7 @@ namespace NimbusFox.PowerAPI.Items {
             }
         }
 
-        private Dictionary<int, Item> _chargeModels;
+        private Dictionary<int, ItemConfiguration> _chargeModels;
         internal TransferRate TransferRate { get; private set; }
         private string DescriptionCode { get; set; }
 
@@ -41,7 +41,7 @@ namespace NimbusFox.PowerAPI.Items {
         public ChargeableItem(ChargeableItemBuilder builder, ItemConfiguration config) : base(builder.Kind()) {
             _builder = builder;
             Configuration = config;
-            _chargeModels = new Dictionary<int, Item>();
+            _chargeModels = new Dictionary<int, ItemConfiguration>();
 
             if (HasToolComponent(Configuration.Components)) {
                 var component = Configuration.Components.Contains<BatteryComponent>() ? Configuration.Components.Get<BatteryComponent>() : Configuration.Components.Get<ChargeableComponent>();
@@ -56,7 +56,7 @@ namespace NimbusFox.PowerAPI.Items {
                     var configs = GameContext.ItemDatabase.GetConfigsByKind(ChargeableItemBuilder.KindCode()).ToList();
                     foreach (var model in chargeModels) {
                         if (configs.Any(x => x.Value.Code == model.Value)) {
-                            _chargeModels.Add(model.Key, builder.Build(BlobAllocator.Blob(true), configs.First(x => x.Value.Code == model.Value).Value, null));
+                            _chargeModels.Add(model.Key, configs.First(x => x.Value.Code == model.Value).Value);
                         }
                     }
 
@@ -176,7 +176,7 @@ namespace NimbusFox.PowerAPI.Items {
                 RunOnUpdateSecond = true;
             }
 
-            return CurrentCharge - orig;
+            return CurrentCharge;
         }
 
         private void SanityCheck() {
@@ -191,7 +191,6 @@ namespace NimbusFox.PowerAPI.Items {
 
         private void UpdateModel(bool update) {
             if (_chargeModels.Any() && update) {
-
                 var selectedIcon = _chargeModels.First().Value;
                 if (CurrentCharge != 0) {
                     var value = (double)CurrentCharge * 100 / MaxCharge;
@@ -204,7 +203,7 @@ namespace NimbusFox.PowerAPI.Items {
                     }
                 }
 
-                Configuration = selectedIcon.Configuration;
+                Configuration = selectedIcon;
             }
         }
 

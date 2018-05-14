@@ -25,34 +25,34 @@ namespace NimbusFox.PowerAPI.Hooks {
                     Cycle.Pause();
                 } else {
                     Cycle.Resume();
-                }
 
-                if (new TimeSpan(DateTime.Now.Ticks - _secondTick.Ticks).TotalSeconds > 1) {
-                    var players = new Lyst<Entity>();
+                    if (new TimeSpan(DateTime.Now.Ticks - _secondTick.Ticks).TotalSeconds > 1) {
+                        var players = new Lyst<Entity>();
 
-                    universe.GetPlayers(players);
+                        universe.GetPlayers(players);
 
-                    foreach (var player in players) {
-                        var runUpdate = false;
-                        for (var i = 0; i < player.Inventory.SlotCount(); i++) {
-                            var stack = player.Inventory.GetItemStack(i);
+                        foreach (var player in players) {
+                            var runUpdate = false;
+                            for (var i = 0; i < player.Inventory.SlotCount(); i++) {
+                                var stack = player.Inventory.GetItemStack(i);
 
-                            if (!stack.IsNull()) {
-                                if (stack.Item is ChargeableItem chargeable) {
-                                    if (chargeable.RunOnUpdateSecond) {
-                                        runUpdate = true;
-                                        chargeable.RunOnUpdateSecond = false;
+                                if (!stack.IsNull()) {
+                                    if (stack.Item is ChargeableItem chargeable) {
+                                        if (chargeable.RunOnUpdateSecond) {
+                                            runUpdate = true;
+                                            chargeable.RunOnUpdateSecond = false;
+                                        }
                                     }
                                 }
                             }
+
+                            if (runUpdate) {
+                                player.Inventory.ItemStoreNeedsStorage();
+                            }
                         }
 
-                        if (runUpdate) {
-                            player.Inventory.ItemStoreNeedsStorage();
-                        }
+                        _secondTick = DateTime.Now;
                     }
-
-                    _secondTick = DateTime.Now;
                 }
             }
         }
