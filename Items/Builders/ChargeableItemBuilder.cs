@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Plukit.Base;
 using Staxel.Items;
 
@@ -12,7 +8,11 @@ namespace NimbusFox.PowerAPI.Items.Builders {
         public ItemRenderer Renderer { get; private set; }
 
         public void Dispose() { }
-        public void Load() { }
+
+        public void Load() {
+            Renderer = new ItemRenderer();
+        }
+
         public virtual Item Build(Blob blob, ItemConfiguration configuration, Item spare) {
             if (spare is ChargeableItem) {
                 if (spare.Configuration != null) {
@@ -27,7 +27,11 @@ namespace NimbusFox.PowerAPI.Items.Builders {
         }
 
         public virtual string Kind() {
-            return "nimbusfox.item.chargeable";
+            return KindCode();
         }
+
+        public static string KindCode() {
+            return "nimbusfox.item.chargeable";
+        } 
     }
 }

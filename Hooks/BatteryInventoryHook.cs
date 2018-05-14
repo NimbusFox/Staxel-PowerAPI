@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using NimbusFox.PowerAPI.Classes;
 using Plukit.Base;
 using Staxel.Items;
@@ -23,8 +19,8 @@ namespace NimbusFox.PowerAPI.Hooks {
         private readonly Cycle _cycle = new Cycle();
 
         public void UniverseUpdateBefore(Universe universe, Timestep step) {
-            if (universe.Server) {
-                _cycle.RunCycle(() => {
+            _cycle.RunCycle(() => {
+                if (universe.Server) {
                     var players = new Lyst<Entity>();
 
                     universe.GetPlayers(players);
@@ -33,18 +29,19 @@ namespace NimbusFox.PowerAPI.Hooks {
                         var batteries = player.Inventory.GetBatteries();
                         var chargeables = player.Inventory.GetChargeables();
 
-                        foreach (var battery in batteries.Where(x => x.ChargeInventory)) {
+                        foreach (var battery in batteries.Where(x => x.ChargeInventory && x.CurrentCharge != 0)) {
+
                             var transfered = 0L;
                             var toTransfer = battery.GetTransferOut();
-                            foreach (var chargeable in chargeables) {
+                            foreach (var chargeable in chargeables.Where(x => x.CurrentCharge != x.MaxCharge)) {
                                 var iToTransfer = chargeable.GetTransferIn(toTransfer - transfered);
-                                var newCharge = chargeable.CurrentWatts + iToTransfer;
-                                if (newCharge > chargeable.MaxWatts) {
-                                    chargeable.CurrentWatts = chargeable.MaxWatts;
-                                    transfered += newCharge - chargeable.MaxWatts;
+                                var newCharge = chargeable.CurrentCharge + iToTransfer;
+                                if (newCharge > chargeable.MaxCharge) {
+                                    chargeable.SetPower(chargeable.MaxCharge);
+                                    transfered += newCharge - chargeable.MaxCharge;
                                 } else {
                                     transfered = iToTransfer;
-                                    chargeable.CurrentWatts = newCharge;
+                                    chargeable.SetPower(newCharge);
                                 }
 
                                 if (transfered == battery.TransferRate.Out) {
@@ -52,11 +49,11 @@ namespace NimbusFox.PowerAPI.Hooks {
                                 }
                             }
 
-                            battery.CurrentWatts -= transfered;
+                            battery.RemovePower(transfered);
                         }
                     }
-                });
-            }
+                }
+            });
         }
         public void UniverseUpdateAfter() { }
         public bool CanPlaceTile(Entity entity, Vector3I location, Tile tile, TileAccessFlags accessFlags) {

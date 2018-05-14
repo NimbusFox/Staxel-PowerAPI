@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NimbusFox.PowerAPI.Tiles.DockSites;
 using NimbusFox.PowerAPI.Tiles.Logic;
 using Plukit.Base;
@@ -15,11 +11,11 @@ using Staxel.Rendering;
 using Staxel.TileStates.Docks;
 
 namespace NimbusFox.PowerAPI.Tiles.Painters {
-    public class GeneratorTileStateEntityPainter : DockTileStateEntityPainter {
+    public class ChargeableTileStateEntityPainter : DockTileStateEntityPainter {
         private readonly List<KeyValuePair<NameTag, int>> _siteTags = new List<KeyValuePair<NameTag, int>>();
         private readonly string _defaultNameTagText;
 
-        public GeneratorTileStateEntityPainter(DockTileStateEntityBuilder builder) : base(builder) {
+        public ChargeableTileStateEntityPainter(DockTileStateEntityBuilder builder) : base(builder) {
 
         }
 
@@ -27,7 +23,7 @@ namespace NimbusFox.PowerAPI.Tiles.Painters {
             AvatarController avatarController, Timestep renderTimestep) {
             base.BeforeRender(graphics, renderOrigin, entity, avatarController, renderTimestep);
 
-            if (!(entity.Logic is GeneratorTileStateEntityLogic logic)) {
+            if (!(entity.Logic is ChargeableTileStateEntityLogic logic)) {
                 return;
             }
 
@@ -41,7 +37,7 @@ namespace NimbusFox.PowerAPI.Tiles.Painters {
             }
 
             for (var i = 0; i < _siteTags.Count; i++) {
-                if (sites[i] is GeneratorDockSite generatorSite) {
+                if (sites[i] is ChargeableDockSite generatorSite) {
                     _siteTags[i].Key.Setup(generatorSite.GetWorldPosition(), Constants.NameTagDefaultOffset, "", false, false, false);
                 }
             }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NimbusFox.PowerAPI.Components;
+﻿using NimbusFox.PowerAPI.Components.Items;
 using NimbusFox.PowerAPI.Items.Builders;
 using Plukit.Base;
 using Staxel.Client;
@@ -11,7 +6,6 @@ using Staxel.Collections;
 using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Tiles;
-using Staxel.Translation;
 
 namespace NimbusFox.PowerAPI.Items {
     public class BatteryItem : ChargeableItem {
@@ -22,6 +16,7 @@ namespace NimbusFox.PowerAPI.Items {
 
         public BatteryItem(BatteryItemBuilder builder, ItemConfiguration config) : base(builder, config) {
             _builder = builder;
+            Configuration = config;
 
             if (HasAssociatedToolComponent(Configuration.Components)) {
                 var component = Configuration.Components.Get<BatteryComponent>();
@@ -33,11 +28,11 @@ namespace NimbusFox.PowerAPI.Items {
         }
 
         public long GetTransferOut() {
-            if (CurrentWatts >= TransferRate.Out) {
+            if (CurrentCharge >= TransferRate.Out) {
                 return TransferRate.Out;
             }
 
-            return CurrentWatts;
+            return CurrentCharge;
         }
 
         public override void Control(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) { }
@@ -56,6 +51,10 @@ namespace NimbusFox.PowerAPI.Items {
 
         public sealed override bool HasAssociatedToolComponent(Plukit.Base.Components components) {
             return components.Contains<BatteryComponent>();
+        }
+
+        public override ItemRenderer FetchRenderer() {
+            return _builder.Renderer;
         }
     }
 }

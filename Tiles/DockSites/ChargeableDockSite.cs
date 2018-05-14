@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NimbusFox.PowerAPI.Items;
+﻿using NimbusFox.PowerAPI.Items;
 using Plukit.Base;
 using Staxel.Docks;
 using Staxel.Effects;
@@ -12,8 +7,8 @@ using Staxel.Player;
 using Staxel.TileStates.Docks;
 
 namespace NimbusFox.PowerAPI.Tiles.DockSites {
-    public class GeneratorDockSite : DockSite {
-        public GeneratorDockSite(Entity entity, DockSiteId id, DockSiteConfiguration dockSiteConfig) : base(entity, id, dockSiteConfig) { }
+    public class ChargeableDockSite : DockSite {
+        public ChargeableDockSite(Entity entity, DockSiteId id, DockSiteConfiguration dockSiteConfig) : base(entity, id, dockSiteConfig) { }
 
         public override bool TryDock(Entity user, EntityUniverseFacade facade, ItemStack stack, uint rotation) {
             if (CanDock(stack) <= 0) {
@@ -46,7 +41,7 @@ namespace NimbusFox.PowerAPI.Tiles.DockSites {
 
         public override int CanDock(ItemStack stack) {
             if (stack.Item is ChargeableItem chargeable) {
-                if (chargeable.MaxWatts == chargeable.CurrentWatts) {
+                if (chargeable.MaxCharge == chargeable.CurrentCharge) {
                     return 0;
                 }
             } else {

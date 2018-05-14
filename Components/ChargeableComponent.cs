@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NimbusFox.PowerAPI.Classes;
+using NimbusFox.PowerAPI.Items.Builders;
 using Plukit.Base;
 
 namespace NimbusFox.PowerAPI.Components {
     public class ChargeableComponent {
-        public long MaxWatts { get; }
+        public long MaxCharge { get; }
         public TransferRate TransferRate { get; }
-        public Dictionary<string, string> ChargeModels { get; }
+        public Dictionary<int, string> ChargeModels { get; }
         public string DescriptionCode { get; }
 
         public ChargeableComponent(Blob config) {
-            MaxWatts = config.GetLong("maxWatts", 300000);
-            ChargeModels = new Dictionary<string, string>();
+            MaxCharge = config.GetLong("maxCharge", 300000);
+            ChargeModels = new Dictionary<int, string>();
             TransferRate = new TransferRate();
             DescriptionCode = config.GetString("descriptionCode", null);
 
@@ -43,8 +40,21 @@ namespace NimbusFox.PowerAPI.Components {
 
             foreach (var charge in blob.KeyValueIteratable) {
                 if (charge.Value.Kind == BlobEntryKind.String) {
-                    if (!ChargeModels.ContainsKey(charge.Key)) {
-                        ChargeModels.Add(charge.Key, charge.Value.GetString());
+
+                    var text = charge.Key;
+
+                    if (text.Contains("%")) {
+                        text = text.Replace("%", "");
+                    }
+
+                    var builder = new ChargeableItemBuilder();
+
+                    builder.Load();
+
+                    if (byte.TryParse(text, out var chargePercent)) {
+                        if (!ChargeModels.ContainsKey(chargePercent)) {
+                            ChargeModels.Add(chargePercent, charge.Value.GetString());
+                        }
                     }
                 }
             }

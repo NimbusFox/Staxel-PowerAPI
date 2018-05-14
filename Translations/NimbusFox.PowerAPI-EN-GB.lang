@@ -1,0 +1,27 @@
+﻿language.code=en-GB
+language=English
+
+nimbusfox.powerapi.perCycle=/cycle
+nimbusfox.powerapi.verb=Watt
+nimbusfox.powerapi.verb.plural=Watts
+
+nimbusfox.powerapi.debugItem.description={5}: {0}/{1} Transfer in: {2}{4} Transfer out: {3}{4}
+
+nimbusfox.powerapi.command.debug.description=^c:F2E200;powerdebug ^c:FFFFFF;Enables the PowerAPI's debug commands
+nimbusfox.powerapi.command.debug.confirmation=If you enable debug commands then your world will no longer be able to get achievements. If you are sure then type "/powerdebug confirm"
+nimbusfox.powerapi.command.debug.enabled=Power API debug enabled
+
+nimbusfox.powerapi.command.debugRequired=To use this command please enable debug mode with "/powerdebug"
+nimbusfox.powerapi.command.noItemInHand=There is no item in your hand
+
+nimbusfox.powerapi.command.addPower.description=^c:F2E200;addpower ^c:FFFFFF;Adds specified power to the item in hand
+nimbusfox.powerapi.command.addPower.added=Added {0-power} Watts to {1-itemCode}
+nimbusfox.powerapi.command.addPower.nonChargeableItem=Unable to add power to {0-itemCode} it does not have charge capacity
+
+nimbusfox.powerapi.command.removePower.description=^c:F2E200;removepower ^c:FFFFFF;Removes specified power from the item in hand
+nimbusfox.powerapi.command.removePower.removed=Removed {0-power} Watts from {1-itemCode}
+nimbusfox.powerapi.command.removePower.nonChargeableItem=Unable to remove power from {0-itemCode} it does not have charge capacity
+
+nimbusfox.powerapi.command.setPower.description=^c:F2E200;setpower ^c:FFFFFF;Sets specified power to the item in hand
+nimbusfox.powerapi.command.setPower.set=Set {0-power} Watts to {1-itemCode}
+nimbusfox.powerapi.command.setPower.nonChargeableItem=Unable to set power for {0-itemCode} it does not have charge capacity

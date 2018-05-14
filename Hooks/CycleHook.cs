@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NimbusFox.PowerAPI.Classes;
+using NimbusFox.PowerAPI.Items;
 using Plukit.Base;
 using Staxel.Items;
 using Staxel.Logic;
@@ -20,12 +17,42 @@ namespace NimbusFox.PowerAPI.Hooks {
         public void GameContextReloadBefore() { }
         public void GameContextReloadAfter() { }
 
+        private DateTime _secondTick = DateTime.Now;
+
         public void UniverseUpdateBefore(Universe universe, Timestep step) {
             if (universe.Server) {
                 if (universe.IsGamePaused()) {
                     Cycle.Pause();
                 } else {
                     Cycle.Resume();
+                }
+
+                if (new TimeSpan(DateTime.Now.Ticks - _secondTick.Ticks).TotalSeconds > 1) {
+                    var players = new Lyst<Entity>();
+
+                    universe.GetPlayers(players);
+
+                    foreach (var player in players) {
+                        var runUpdate = false;
+                        for (var i = 0; i < player.Inventory.SlotCount(); i++) {
+                            var stack = player.Inventory.GetItemStack(i);
+
+                            if (!stack.IsNull()) {
+                                if (stack.Item is ChargeableItem chargeable) {
+                                    if (chargeable.RunOnUpdateSecond) {
+                                        runUpdate = true;
+                                        chargeable.RunOnUpdateSecond = false;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (runUpdate) {
+                            player.Inventory.ItemStoreNeedsStorage();
+                        }
+                    }
+
+                    _secondTick = DateTime.Now;
                 }
             }
         }

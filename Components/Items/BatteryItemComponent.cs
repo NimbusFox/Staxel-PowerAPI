@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Plukit.Base;
+﻿using Plukit.Base;
 
-namespace NimbusFox.PowerAPI.Components {
+namespace NimbusFox.PowerAPI.Components.Items {
     public class BatteryComponent : ChargeableComponent {
         public bool ChargeInventory { get; }
 
