@@ -1,0 +1,5 @@
+﻿{
+    "__inherits": "mods/Power API/TestItems/TestBench/TestBench.0.tile",
+    "code": "nimbusfox.powerapi.tile.testBench.25",
+    "voxels": "mods/Power API/TestItems/TestBench/chargingTable1_25.qb"
+}

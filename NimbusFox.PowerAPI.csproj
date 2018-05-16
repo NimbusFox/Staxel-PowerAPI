@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Plukit.Base">
@@ -49,9 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Cycle.cs" />
+    <Compile Include="Classes\DestructionEntityBuilder.cs" />
     <Compile Include="Classes\Extensions.cs" />
     <Compile Include="Classes\ChargeableItemIcons.cs" />
-    <Compile Include="Classes\TilePower.cs" />
+    <Compile Include="Classes\Power.cs" />
     <Compile Include="Classes\TransferRate.cs" />
     <Compile Include="Commands\Debug\AddPowerCommand.cs" />
     <Compile Include="Commands\Debug\RemovePowerCommand.cs" />
@@ -62,24 +65,106 @@
     <Compile Include="Components\Items\Builders\ChargeableItemComponentBuilder.cs" />
     <Compile Include="Components\ChargeableComponent.cs" />
     <Compile Include="Components\Tiles\Builders\ChargeableTileComponentBuilder.cs" />
+    <Compile Include="Components\Tiles\Builders\WrenchableTileComponentBuilder.cs" />
+    <Compile Include="Components\WrenchableComponent.cs" />
     <Compile Include="Hooks\BatteryInventoryHook.cs" />
     <Compile Include="Hooks\CycleHook.cs" />
+    <Compile Include="Hooks\PowerDockHook.cs" />
     <Compile Include="Items\BatteryItem.cs" />
     <Compile Include="Items\Builders\BatteryItemBuilder.cs" />
     <Compile Include="Items\Builders\ChargeableItemBuilder.cs" />
+    <Compile Include="Items\Builders\WrenchItemBuilder.cs" />
     <Compile Include="Items\ChargeableItem.cs" />
+    <Compile Include="Items\WrenchItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tiles\Builders\ChargeableTileStateBuilder.cs" />
     <Compile Include="Tiles\Builders\ChargeableTileStateEntityBuilder.cs" />
+    <Compile Include="Tiles\DockSites\BatteryDockSite.cs" />
     <Compile Include="Tiles\DockSites\ChargeableDockSite.cs" />
     <Compile Include="Tiles\Logic\ChargeableTileStateEntityLogic.cs" />
-    <Compile Include="Tiles\Painters\ChargeableTileStateEntityPainter.cs" />
+    <Compile Include="Tiles\Painters\ChargeableTileEntityPainter.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="NimbusFox.PowerAPI.mod">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Staxel\Items\Wrench\wrench.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Staxel\Items\Wrench\Wrench.item">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Staxel\Notifications\PowerInfo.notification">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Staxel\Tiles\inherit\wrenchable.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\battery1a.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\battery1b.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\battery1c.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\battery1d.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\battery1e.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\batteryTest.0.item">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\batteryTest.100.item">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\batteryTest.25.item">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\batteryTest.50.item">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Battery\batteryTest.75.item">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\chargingTable1off.qb" />
+    <None Include="TestItems\TestBench\chargingTable1_0.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\chargingTable1_100.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\chargingTable1_25.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\chargingTable1_50.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\chargingTable1_75.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\TestBench.100.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\TestBench.75.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\TestBench.50.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\TestBench.25.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\TestBench.0.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\TestBench\TestBench.dock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Translations\NimbusFox.PowerAPI-EN-GB.lang">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,13 +1,14 @@
 ﻿using Plukit.Base;
 using Staxel.Core;
+using Staxel.Tiles;
 
 namespace NimbusFox.PowerAPI.Components.Tiles.Builders {
-    class ChargeableTileComponentBuilder : IComponentBuilder {
+    public class ChargeableTileComponentBuilder : ITileComponentBuilder {
         public string Kind() {
             return "chargeable";
         }
 
-        public object Instance(Blob config) {
+        public object Instance(TileConfiguration tile, Blob config) {
             return new ChargeableComponent(config);
         }
     }

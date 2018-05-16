@@ -9,8 +9,10 @@ namespace NimbusFox.PowerAPI.Components {
         public TransferRate TransferRate { get; }
         public Dictionary<int, string> ChargeModels { get; }
         public string DescriptionCode { get; }
+        private Blob _blob;
 
         public ChargeableComponent(Blob config) {
+            _blob = config;
             MaxCharge = config.GetLong("maxCharge", 300000);
             ChargeModels = new Dictionary<int, string>();
             TransferRate = new TransferRate();
@@ -47,10 +49,6 @@ namespace NimbusFox.PowerAPI.Components {
                         text = text.Replace("%", "");
                     }
 
-                    var builder = new ChargeableItemBuilder();
-
-                    builder.Load();
-
                     if (byte.TryParse(text, out var chargePercent)) {
                         if (!ChargeModels.ContainsKey(chargePercent)) {
                             ChargeModels.Add(chargePercent, charge.Value.GetString());
@@ -58,6 +56,10 @@ namespace NimbusFox.PowerAPI.Components {
                     }
                 }
             }
+        }
+
+        public Blob GetBlob() {
+            return _blob;
         }
     }
 }

@@ -1,0 +1,34 @@
+﻿{
+    "categories": [
+        "technology",
+        "tech",
+        "wrench"
+    ],
+    "code": "nimbusfox.powerapi.item.wrench",
+    "icon": "mods/Power API/Staxel/Items/Wrench/wrench.qb",
+    "inHand": "mods/Power API/Staxel/Items/Wrench/wrench.qb",
+    "inHandOffset": {
+        "x": 0.0,
+        "y": -0.5,
+        "z": 0.0
+    },
+    "inHandRotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": -1.56
+    },
+    "interactVerb": "", 
+    "isDockable": false,
+    "kind": "nimbusfox.powerapi.item.wrench",
+    "pricing": {
+        "buyable": true,
+        "sellPrice": 100,
+        "value": 400
+    },
+    "searchable": true,
+    "usageOffset": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    }
+}

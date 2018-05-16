@@ -18,69 +18,41 @@ namespace NimbusFox.PowerAPI.Items {
     public class ChargeableItem : Item {
 
         private readonly ChargeableItemBuilder _builder;
-        internal long MaxCharge { get; private set; }
-
-        private long _currentCharge;
 
         public bool RunOnUpdateSecond { get; internal set; }
 
-        internal long CurrentCharge {
-            get => _currentCharge;
-            private set {
-                _currentCharge = value;
-                SanityCheck();
-            }
-        }
+        internal Power ItemPower;
 
         private Dictionary<int, ItemConfiguration> _chargeModels;
-        internal TransferRate TransferRate { get; private set; }
         private string DescriptionCode { get; set; }
-
-        private static bool _createChildren = true;
 
         public ChargeableItem(ChargeableItemBuilder builder, ItemConfiguration config) : base(builder.Kind()) {
             _builder = builder;
             Configuration = config;
             _chargeModels = new Dictionary<int, ItemConfiguration>();
+            ItemPower = new Power(UpdateModel);
 
             if (HasToolComponent(Configuration.Components)) {
                 var component = Configuration.Components.Contains<BatteryComponent>() ? Configuration.Components.Get<BatteryComponent>() : Configuration.Components.Get<ChargeableComponent>();
-
-                MaxCharge = component.MaxCharge;
-                TransferRate = component.TransferRate;
+                
+                ItemPower = Power.GetTilePowerFromBlob(component.GetBlob(), UpdateModel);
                 DescriptionCode = component.DescriptionCode;
                 var chargeModels = component.ChargeModels;
-
-                if (_createChildren) {
-                    _createChildren = false;
-                    var configs = GameContext.ItemDatabase.GetConfigsByKind(ChargeableItemBuilder.KindCode()).ToList();
-                    foreach (var model in chargeModels) {
-                        if (configs.Any(x => x.Value.Code == model.Value)) {
-                            _chargeModels.Add(model.Key, configs.First(x => x.Value.Code == model.Value).Value);
-                        }
+                var configs = GameContext.ItemDatabase.GetConfigsByKind(_builder.Kind()).ToList();
+                foreach (var model in chargeModels) {
+                    if (configs.Any(x => x.Value.Code == model.Value)) {
+                        _chargeModels.Add(model.Key, configs.First(x => x.Value.Code == model.Value).Value);
                     }
-
-                    _createChildren = true;
                 }
             }
         }
 
-        public override void Update(Entity entity, Timestep step, EntityUniverseFacade entityUniverseFacade) {
-        }
-        public override void Control(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) { }
-
         protected override void AssignFrom(Item item) {
             if (item is ChargeableItem charge) {
-                MaxCharge = charge.MaxCharge;
-                CurrentCharge = charge.CurrentCharge;
+                ItemPower = charge.ItemPower;
                 _chargeModels = charge._chargeModels;
-                TransferRate = charge.TransferRate;
                 DescriptionCode = charge.DescriptionCode;
             }
-        }
-
-        public long GetTransferIn(long incoming) {
-            return incoming > TransferRate.In ? TransferRate.In : incoming;
         }
 
         public override bool PlacementTilePreview(AvatarController avatar, Entity entity, Universe universe, Vector3IMap<Tile> previews) {
@@ -97,25 +69,25 @@ namespace NimbusFox.PowerAPI.Items {
 
         public override void StorePersistenceData(Blob blob) {
             base.StorePersistenceData(blob);
-            blob.SetLong("currentWatts", CurrentCharge);
+            blob.SetLong("currentCharge", ItemPower.CurrentCharge);
         }
 
         public override void Store(Blob blob) {
             base.Store(blob);
-            blob.SetLong("currentWatts", CurrentCharge);
+            blob.SetLong("currentCharge", ItemPower.CurrentCharge);
         }
 
         public override void Restore(ItemConfiguration configuration, Blob blob) {
             base.Restore(configuration, blob);
-            CurrentCharge = blob.GetLong("currentWatts", 0);
+            SetPower(blob.GetLong("currentCharge", 0));
 
             UpdateModel(true);
         }
 
         public override string GetItemDescription(LanguageDatabase lang) {
-            var text = lang.GetTranslationString(DescriptionCode);
+            var text = DescriptionCode != null ? lang.GetTranslationString(DescriptionCode) : base.GetItemDescription(lang);
 
-            return string.Format(text, CurrentCharge, MaxCharge, TransferRate.In, TransferRate.Out,
+            return string.Format(text, ItemPower.CurrentCharge, ItemPower.MaxCharge, ItemPower.TransferRate.In, ItemPower.TransferRate.Out,
                 lang.GetTranslationString("nimbusfox.powerapi.perCycle"),
                 lang.GetTranslationString("nimbusfox.powerapi.verb.plural"));
         }
@@ -125,20 +97,10 @@ namespace NimbusFox.PowerAPI.Items {
         }
 
         public long AddPower(long value) {
-            var output = value;
-            var orig = CurrentCharge;
-            var calc = CurrentCharge + value;
+            var orig = ItemPower.CurrentCharge;
+            var output = ItemPower.AddPower(value);
 
-            if (calc > MaxCharge) {
-                var diff = calc - MaxCharge;
-                output -= diff;
-            }
-
-            CurrentCharge += value;
-
-            UpdateModel(orig != CurrentCharge);
-
-            if (orig != CurrentCharge) {
+            if (orig != ItemPower.CurrentCharge) {
                 RunOnUpdateSecond = true;
             }
 
@@ -146,20 +108,10 @@ namespace NimbusFox.PowerAPI.Items {
         }
 
         public long RemovePower(long value) {
-            var output = value;
-            var orig = CurrentCharge;
-            var calc = CurrentCharge - value;
+            var orig = ItemPower.CurrentCharge;
+            var output = ItemPower.RemovePower(value);
 
-            if (calc < 0) {
-                var diff = -calc;
-                output -= diff;
-            }
-
-            CurrentCharge -= value;
-
-            UpdateModel(orig != CurrentCharge);
-
-            if (orig != CurrentCharge) {
+            if (orig != ItemPower.CurrentCharge) {
                 RunOnUpdateSecond = true;
             }
 
@@ -167,37 +119,22 @@ namespace NimbusFox.PowerAPI.Items {
         }
 
         public long SetPower(long value) {
-            var orig = CurrentCharge;
-            CurrentCharge = value;
+            var orig = ItemPower.CurrentCharge;
+            var output = ItemPower.SetPower(value);
 
-            UpdateModel(orig != CurrentCharge);
-
-            if (orig != CurrentCharge) {
+            if (orig != ItemPower.CurrentCharge) {
                 RunOnUpdateSecond = true;
             }
 
-            return CurrentCharge;
-        }
-
-        private void SanityCheck() {
-            if (CurrentCharge < 0) {
-                CurrentCharge = 0;
-            }
-            
-            if (CurrentCharge > MaxCharge) {
-                CurrentCharge = MaxCharge;
-            }
+            return output;
         }
 
         private void UpdateModel(bool update) {
             if (_chargeModels.Any() && update) {
                 var selectedIcon = _chargeModels.First().Value;
-                if (CurrentCharge != 0) {
-                    var value = (double)CurrentCharge * 100 / MaxCharge;
-                    var percentage = Math.Round(value, 0);
-
+                if (ItemPower.CurrentCharge != 0) {
                     foreach (var model in _chargeModels) {
-                        if (percentage >= model.Key) {
+                        if (ItemPower.ChargePercentage >= model.Key) {
                             selectedIcon = model.Value;
                         }
                     }
@@ -209,12 +146,18 @@ namespace NimbusFox.PowerAPI.Items {
 
         public override bool Same(Item item) {
             if (item is ChargeableItem chargeable) {
-                if (chargeable.CurrentCharge != CurrentCharge) {
+                if (chargeable.ItemPower.CurrentCharge != ItemPower.CurrentCharge) {
                     return false;
                 }
             }
 
             return item.GetItemCode() == GetItemCode();
+        }
+
+        public override void Update(Entity entity, Timestep step, EntityUniverseFacade entityUniverseFacade) {
+        }
+
+        public override void Control(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) {
         }
     }
 }

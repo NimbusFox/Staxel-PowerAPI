@@ -1,0 +1,7 @@
+{
+  "__inherits": "mods/Power API/TestItems/Battery/batteryTest.0.item",
+  "code": "nimbusfox.powerapi.debug.battery.100",
+  "icon": "mods/Power API/TestItems/Battery/battery1e.qb",
+  "inHand": "mods/Power API/TestItems/Battery/battery1e.qb",
+  "searchable": false
+}

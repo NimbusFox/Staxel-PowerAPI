@@ -29,19 +29,9 @@ namespace NimbusFox.PowerAPI.Tiles.DockSites {
             return true;
         }
 
-        public override bool TryUndock(PlayerEntityLogic player, EntityUniverseFacade facade, int quantity) {
-            if (IsEmpty() || DockedItem.DockingEntity != player.PlayerEntity.Id) {
-                return false;
-            }
-
-            var flag = base.TryUndock(player, facade, quantity);
-
-            return flag;
-        }
-
         public override int CanDock(ItemStack stack) {
             if (stack.Item is ChargeableItem chargeable) {
-                if (chargeable.MaxCharge == chargeable.CurrentCharge) {
+                if (chargeable.ItemPower.MaxCharge == chargeable.ItemPower.CurrentCharge) {
                     return 0;
                 }
             } else {
@@ -50,5 +40,7 @@ namespace NimbusFox.PowerAPI.Tiles.DockSites {
 
             return base.CanDock(stack);
         }
+
+        public static string Name => "chargeable";
     }
 }

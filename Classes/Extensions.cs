@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using NimbusFox.PowerAPI.Items;
 using Staxel.Items;
 using Staxel.Logic;
+using Staxel.Player;
+using Staxel.Tiles;
 
 namespace NimbusFox.PowerAPI.Classes {
     public static class Extensions {

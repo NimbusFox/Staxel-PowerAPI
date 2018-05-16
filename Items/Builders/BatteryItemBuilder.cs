@@ -18,7 +18,7 @@ namespace NimbusFox.PowerAPI.Items.Builders {
         }
 
         public override string Kind() {
-            return "nimbusfox.item.battery";
+            return "nimbusfox.powerapi.item.battery";
         }
     }
 }

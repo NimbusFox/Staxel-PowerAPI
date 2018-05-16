@@ -27,14 +27,6 @@ namespace NimbusFox.PowerAPI.Items {
         public override void Update(Entity entity, Timestep step, EntityUniverseFacade entityUniverseFacade) {
         }
 
-        public long GetTransferOut() {
-            if (CurrentCharge >= TransferRate.Out) {
-                return TransferRate.Out;
-            }
-
-            return CurrentCharge;
-        }
-
         public override void Control(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) { }
 
         protected override void AssignFrom(Item item) {

@@ -2,10 +2,37 @@
 language=English
 
 nimbusfox.powerapi.perCycle=/cycle
-nimbusfox.powerapi.verb=Watt
+nimbusfox.powerapi.verb.singular=Watt
 nimbusfox.powerapi.verb.plural=Watts
+nimbusfox.powerapi.verb.changeMode=Mode Change
+nimbusfox.powerapi.verb.rotate=Rotate
+nimbusfox.powerapi.verb.pickUp=Pick Up
+nimbusfox.powerapi.verb.powerCheck=Check Power
 
+nimbusfox.powerapi.notifications.powerInformation.text=Watts: {0}/{1}
+
+staxel.category.technology=Technology
+staxel.category.tech=Tech
+staxel.category.wrench=Wrench
+staxel.category.battery=Battery
+staxel.category.chargeable=Chargeable
+
+nimbusfox.powerapi.needWrench=You will need a wrench to pick this up
+
+nimbusfox.powerapi.item.wrench.description=An handy item to adjust and pickup machinery.
+
+nimbusfox.powerapi.debug.battery.0=Battery (0%)
+nimbusfox.powerapi.debug.battery.25=Battery (25%)
+nimbusfox.powerapi.debug.battery.50=Battery (50%)
+nimbusfox.powerapi.debug.battery.75=Battery (75%)
+nimbusfox.powerapi.debug.battery.100=Battery (100%)
 nimbusfox.powerapi.debugItem.description={5}: {0}/{1} Transfer in: {2}{4} Transfer out: {3}{4}
+
+nimbusfox.powerapi.tile.testBench.0=Test Bench
+nimbusfox.powerapi.tile.testBench.25=Test Bench
+nimbusfox.powerapi.tile.testBench.50=Test Bench
+nimbusfox.powerapi.tile.testBench.75=Test Bench
+nimbusfox.powerapi.tile.testBench.100=Test Bench
 
 nimbusfox.powerapi.command.debug.description=^c:F2E200;powerdebug ^c:FFFFFF;Enables the PowerAPI's debug commands
 nimbusfox.powerapi.command.debug.confirmation=If you enable debug commands then your world will no longer be able to get achievements. If you are sure then type "/powerdebug confirm"

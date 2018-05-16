@@ -26,30 +26,34 @@ namespace NimbusFox.PowerAPI.Hooks {
                     universe.GetPlayers(players);
 
                     foreach (var player in players) {
-                        var batteries = player.Inventory.GetBatteries();
-                        var chargeables = player.Inventory.GetChargeables();
+                        try {
+                            var batteries = player.Inventory.GetBatteries();
+                            var chargeables = player.Inventory.GetChargeables();
 
-                        foreach (var battery in batteries.Where(x => x.ChargeInventory && x.CurrentCharge != 0)) {
+                            foreach (var battery in batteries.Where(x => x.ChargeInventory && x.ItemPower.CurrentCharge != 0)) {
 
-                            var transfered = 0L;
-                            var toTransfer = battery.GetTransferOut();
-                            foreach (var chargeable in chargeables.Where(x => x.CurrentCharge != x.MaxCharge)) {
-                                var iToTransfer = chargeable.GetTransferIn(toTransfer - transfered);
-                                var newCharge = chargeable.CurrentCharge + iToTransfer;
-                                if (newCharge > chargeable.MaxCharge) {
-                                    chargeable.SetPower(chargeable.MaxCharge);
-                                    transfered += newCharge - chargeable.MaxCharge;
-                                } else {
-                                    transfered = iToTransfer;
-                                    chargeable.SetPower(newCharge);
+                                var transfered = 0L;
+                                var toTransfer = battery.ItemPower.GetTransferOut();
+                                foreach (var chargeable in chargeables.Where(x => x.ItemPower.CurrentCharge != x.ItemPower.MaxCharge)) {
+                                    var iToTransfer = chargeable.ItemPower.GetTransferIn(toTransfer - transfered);
+                                    var newCharge = chargeable.ItemPower.CurrentCharge + iToTransfer;
+                                    if (newCharge > chargeable.ItemPower.MaxCharge) {
+                                        chargeable.SetPower(chargeable.ItemPower.MaxCharge);
+                                        transfered += newCharge - chargeable.ItemPower.MaxCharge;
+                                    } else {
+                                        transfered = iToTransfer;
+                                        chargeable.SetPower(newCharge);
+                                    }
+
+                                    if (transfered == battery.ItemPower.TransferRate.Out) {
+                                        break;
+                                    }
                                 }
 
-                                if (transfered == battery.TransferRate.Out) {
-                                    break;
-                                }
+                                battery.RemovePower(transfered);
                             }
+                        } catch {
 
-                            battery.RemovePower(transfered);
                         }
                     }
                 }

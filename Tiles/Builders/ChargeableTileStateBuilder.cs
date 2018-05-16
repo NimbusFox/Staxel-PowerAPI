@@ -17,7 +17,7 @@ namespace NimbusFox.PowerAPI.Tiles.Builders {
         }
 
         public static string KindCode() {
-            return "nimbusfox.powerapi.tileState.Generator";
+            return "nimbusfox.powerapi.tileState.Chargeable";
         }
     }
 }

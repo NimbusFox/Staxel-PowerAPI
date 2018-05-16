@@ -1,0 +1,40 @@
+{
+    "categories": [
+        "technology",
+        "tech",
+        "battery",
+        "chargeable"
+    ],
+    "code": "nimbusfox.powerapi.debug.battery.0",
+    "icon": "mods/Power API/TestItems/Battery/battery1a.qb",
+    "inHand": "mods/Power API/TestItems/Battery/battery1a.qb",
+    "inHandOffset": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "inHandRotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": -1.56
+    },
+    "isDockable": true,
+    "kind": "nimbusfox.powerapi.item.battery",
+    "searchable": true,
+    "usageOffset": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "battery": {
+        "chargeInventory": false,
+        "descriptionCode": "nimbusfox.powerapi.debugItem.description",
+        "chargeModels": {
+            "0%": "nimbusfox.powerapi.debug.battery.0",
+            "25%": "nimbusfox.powerapi.debug.battery.25",
+            "50%": "nimbusfox.powerapi.debug.battery.50",
+            "75%": "nimbusfox.powerapi.debug.battery.75",
+            "100%": "nimbusfox.powerapi.debug.battery.100"
+        }
+    }
+}

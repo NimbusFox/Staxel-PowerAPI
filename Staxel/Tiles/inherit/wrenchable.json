@@ -1,0 +1,8 @@
+﻿{
+    "__inherits": "staxel/tile/materialbase.config",
+    "wrenchable": {
+        "keepCharge": true,
+        "keepInventory": false
+    },
+    "placeSoundGroup": "staxel.sounds.place.Stone"
+}
