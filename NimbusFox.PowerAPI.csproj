@@ -66,8 +66,10 @@
     <Compile Include="Components\Items\Builders\ChargeableItemComponentBuilder.cs" />
     <Compile Include="Components\ChargeableComponent.cs" />
     <Compile Include="Components\Items\CapacitorItemComponent.cs" />
+    <Compile Include="Components\Tiles\Builders\CableTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\ChargeableTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\WrenchableTileComponentBuilder.cs" />
+    <Compile Include="Components\Tiles\CableTileComponent.cs" />
     <Compile Include="Components\WrenchableComponent.cs" />
     <Compile Include="Hooks\BatteryInventoryHook.cs" />
     <Compile Include="Hooks\CycleHook.cs" />
@@ -81,11 +83,14 @@
     <Compile Include="Items\ChargeableItem.cs" />
     <Compile Include="Items\WrenchItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tiles\Builders\ChargeableDockTileStateBuilder.cs" />
+    <Compile Include="Tiles\Builders\ChargeableDockTileStateEntityBuilder.cs" />
     <Compile Include="Tiles\Builders\ChargeableTileStateBuilder.cs" />
     <Compile Include="Tiles\Builders\ChargeableTileStateEntityBuilder.cs" />
     <Compile Include="Tiles\DockSites\BatteryDockSite.cs" />
     <Compile Include="Tiles\DockSites\CapacitorDockSite.cs" />
     <Compile Include="Tiles\DockSites\ChargeableDockSite.cs" />
+    <Compile Include="Tiles\Logic\ChargeableDockTileStateEntityLogic.cs" />
     <Compile Include="Tiles\Logic\ChargeableTileStateEntityLogic.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +140,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestItems\Battery\batteryTest.75.item">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Cable\cable.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Cable\cable1.qb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestItems\Capacitor\capacitorTest.50.item">

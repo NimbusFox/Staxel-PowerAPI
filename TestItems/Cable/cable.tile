@@ -1,0 +1,24 @@
+{
+    "__inherits": "mods/Power API/Staxel/Tiles/inherit/wrenchable.json",
+    "code": "nimbusfox.powerapi.debug.cable",
+    "isDockacble": false,
+    "tileStateKind": "nimbusfox.powerapi.tileState.Cable",
+    "kind": "object",
+    "voxels": "mods/Power API/TestItems/Cable/cable1.qb",
+    "wallPushOut": true,
+    "solid": false,
+    "cable": {
+        "maxCharge": 200,
+        "transferRate": {
+            "in": 20,
+            "out": 20
+        }
+    },
+    "collision": true,
+    "orientationVariants": false,
+    "priority": 32,
+    "searchable": true,
+    "placementDirection": [
+        "yn"
+    ]
+}

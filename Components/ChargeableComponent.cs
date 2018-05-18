@@ -5,36 +5,36 @@ using Plukit.Base;
 
 namespace NimbusFox.PowerAPI.Components {
     public class ChargeableComponent {
-        public long MaxCharge { get; }
+        public long MaxCharge { get; internal set; }
         public TransferRate TransferRate { get; }
         public Dictionary<int, string> ChargeModels { get; }
         public string DescriptionCode { get; }
         private Blob _blob;
 
-        public ChargeableComponent(Blob config) {
+        public ChargeableComponent(Blob config, long maxCharge = 300000, long transferIn = 128, long transferOut = 128) {
             _blob = config;
-            MaxCharge = config.GetLong("maxCharge", 300000);
+            MaxCharge = config.GetLong("maxCharge", maxCharge);
             ChargeModels = new Dictionary<int, string>();
             TransferRate = new TransferRate();
             DescriptionCode = config.GetString("descriptionCode", null);
 
             if (!config.Contains("transferRate")) {
-                TransferRate.In = 128;
-                TransferRate.Out = 128;
+                TransferRate.In = transferIn;
+                TransferRate.Out = transferOut;
             } else {
                 if (config.KeyValueIteratable["transferRate"].Kind == BlobEntryKind.Int) {
-                    var rate = config.GetLong("transferRate", 128);
+                    var rate = config.GetLong("transferRate", transferIn);
 
                     TransferRate.In = rate;
                     TransferRate.Out = rate;
                 } else if (config.KeyValueIteratable["transferRate"].Kind == BlobEntryKind.Blob) {
                     var rates = config.GetBlob("transferRate");
 
-                    TransferRate.In = rates.GetLong("in", 128);
-                    TransferRate.Out = rates.GetLong("out", 128);
+                    TransferRate.In = rates.GetLong("in", transferIn);
+                    TransferRate.Out = rates.GetLong("out", transferOut);
                 } else {
-                    TransferRate.In = 128;
-                    TransferRate.Out = 128;
+                    TransferRate.In = transferIn;
+                    TransferRate.Out = transferOut;
                 }
             }
 

@@ -4,11 +4,31 @@ namespace NimbusFox.PowerAPI.Classes {
     public class Cycle {
         private DateTime _lastCycle = DateTime.MinValue;
         private static bool _paused;
+
+        private byte _multiplier = 1;
+
+        public Cycle(byte multiplier = 1) {
+            SetMultiplier(multiplier);
+        }
+
+        public void SetMultiplier(byte multiplier) {
+            if (multiplier > 5) {
+                multiplier = 5;
+            }
+
+            if (multiplier < 1) {
+                multiplier = 1;
+            }
+
+            _multiplier = multiplier;
+        }
+
         /// <summary>
         /// Runs function every 50 milliseconds equalling to 20 times a second.
         /// Will not run when game is paused
         /// </summary>
         /// <param name="function"></param>
+        /// <param name="multiplier"></param>
         public void RunCycle(Action function) {
             if (!_paused) {
                 var cyclesToRun = 0;
@@ -22,7 +42,7 @@ namespace NimbusFox.PowerAPI.Classes {
                     }
                 }
 
-                for (var i = 0; i < cyclesToRun; i++) {
+                for (var i = 0; i < cyclesToRun * _multiplier; i++) {
                     function();
                 }
 

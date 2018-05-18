@@ -44,10 +44,17 @@ namespace NimbusFox.PowerAPI.Hooks {
                 foreach (var location in ChargeableDocks.ToArray()) {
                     if (universe.TryFetchTileStateEntityLogic(location, TileAccessFlags.SynchronousWait, out var logic)
                     ) {
-                        if (logic is ChargeableTileStateEntityLogic dockLogic) {
-                            var batteryDocks = dockLogic.DockSites.Where(x => x is BatteryDockSite && !x.DockedItem.Stack.IsNull())
-                    .Select(x => x.DockedItem.Stack.Item).ToList();
-                            var chargeableDocks = dockLogic.DockSites.Where(x => x is ChargeableDockSite && x is BatteryDockSite == false && x is CapacitorDockSite == false && !x.DockedItem.Stack.IsNull())
+                        if (logic is ChargeableDockTileStateEntityLogic dockLogic) {
+                            if (dockLogic.TilePower == null) {
+                                continue;
+                            }
+
+                            var batteryDocks = dockLogic.DockSites
+                                .Where(x => x is BatteryDockSite && !x.DockedItem.Stack.IsNull())
+                                .Select(x => x.DockedItem.Stack.Item).ToList();
+                            var chargeableDocks = dockLogic.DockSites
+                                .Where(x => x is ChargeableDockSite && x is BatteryDockSite == false &&
+                                            x is CapacitorDockSite == false && !x.DockedItem.Stack.IsNull())
                                 .Select(x => x.DockedItem.Stack.Item).ToList();
 
                             PermitRemove = true;
@@ -99,7 +106,7 @@ namespace NimbusFox.PowerAPI.Hooks {
                                 var tileTransfered = 0L;
 
                                 foreach (var item in chargeableDocks) {
-                                    var chargeable = (ChargeableItem) item;
+                                    var chargeable = (ChargeableItem)item;
                                     if (chargeable.ItemPower.CurrentCharge != chargeable.ItemPower.MaxCharge) {
                                         var iToTransfer =
                                             chargeable.ItemPower.GetTransferIn(tileTransfer - tileTransfered);

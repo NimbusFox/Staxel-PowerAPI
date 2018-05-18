@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NimbusFox.PowerAPI.Components;
+using NimbusFox.PowerAPI.Components.Tiles;
 using Plukit.Base;
 
 namespace NimbusFox.PowerAPI.Classes {
@@ -39,7 +40,7 @@ namespace NimbusFox.PowerAPI.Classes {
 
             CurrentCharge = 0;
 
-            MaxCharge = 300000;
+            MaxCharge = 30000;
 
             _modelUpdate = modelUpdate;
 
@@ -110,6 +111,14 @@ namespace NimbusFox.PowerAPI.Classes {
             return null;
         }
 
+        public void GetPowerFromComponent<T>(T component) {
+            if (component is CableTileComponent chargeable) {
+                TransferRate = chargeable.TransferRate;
+                MaxCharge = chargeable.MaxCharge;
+                Models = chargeable.ChargeModels;
+            }
+        }
+
         public long AddPower(long value) {
             var output = value;
             var orig = CurrentCharge;
@@ -122,7 +131,7 @@ namespace NimbusFox.PowerAPI.Classes {
 
             CurrentCharge += value;
 
-            _modelUpdate(orig != CurrentCharge);
+            _modelUpdate?.Invoke(orig != CurrentCharge);
 
             return output;
         }
@@ -139,7 +148,7 @@ namespace NimbusFox.PowerAPI.Classes {
 
             CurrentCharge -= value;
 
-            _modelUpdate(orig != CurrentCharge);
+            _modelUpdate?.Invoke(orig != CurrentCharge);
 
             return output;
         }
@@ -148,7 +157,7 @@ namespace NimbusFox.PowerAPI.Classes {
             var orig = CurrentCharge;
             CurrentCharge = value;
 
-            _modelUpdate(orig != CurrentCharge);
+            _modelUpdate?.Invoke(orig != CurrentCharge);
 
             return CurrentCharge;
         }

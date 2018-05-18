@@ -17,7 +17,7 @@ staxel.category.wrench=Wrench
 staxel.category.battery=Battery
 staxel.category.chargeable=Chargeable
 
-nimbusfox.powerapi.needWrench=You will need a wrench to pick this up
+nimbusfox.powerapi.needWrench=Wrench
 
 nimbusfox.powerapi.item.wrench.description=An handy item to adjust and pickup machinery.
 

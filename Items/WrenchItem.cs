@@ -76,19 +76,37 @@ namespace NimbusFox.PowerAPI.Items {
                 if (entity.PlayerEntityLogic.LookingAtTile(out var target, out _)) {
                     if (facade.ReadTile(target, TileAccessFlags.SynchronousWait, out var tile)) {
                         if (tile.Configuration.Components.Contains<WrenchableComponent>()) {
-                            var logic = (ChargeableTileStateEntityLogic) facade.FetchTileStateEntityLogic(target,
+                            var logic = facade.FetchTileStateEntityLogic(target,
                                 TileAccessFlags.SynchronousWait);
-                            var notificationParams = new NotificationParams(2);
 
-                            notificationParams.SetString(0, $"{logic.TilePower?.CurrentCharge ?? 0 :n0}");
-                            notificationParams.SetString(1, $"{logic.TilePower?.MaxCharge ?? 0:n0}");
+                            if (logic is ChargeableDockTileStateEntityLogic dockLogic) {
 
-                            var notification =
-                                GameContext.NotificationDatabase.CreateNotificationFromCode(
-                                    "nimbusfox.powerapi.notifications.powerInformation", facade.Step,
-                                    notificationParams, true);
+                                var notificationParams = new NotificationParams(2);
 
-                            entity.PlayerEntityLogic?.ShowNotification(notification);
+                                notificationParams.SetString(0, $"{dockLogic.TilePower?.CurrentCharge ?? 0:n0}");
+                                notificationParams.SetString(1, $"{dockLogic.TilePower?.MaxCharge ?? 0:n0}");
+
+                                var notification =
+                                    GameContext.NotificationDatabase.CreateNotificationFromCode(
+                                        "nimbusfox.powerapi.notifications.powerInformation", facade.Step,
+                                        notificationParams, true);
+
+                                entity.PlayerEntityLogic?.ShowNotification(notification);
+                            }
+
+                            if (logic is ChargeableTileStateEntityLogic tileLogic) {
+                                var notificationParams = new NotificationParams(2);
+
+                                notificationParams.SetString(0, $"{tileLogic.TilePower?.CurrentCharge ?? 0:n0}");
+                                notificationParams.SetString(1, $"{tileLogic.TilePower?.MaxCharge ?? 0:n0}");
+
+                                var notification =
+                                    GameContext.NotificationDatabase.CreateNotificationFromCode(
+                                        "nimbusfox.powerapi.notifications.powerInformation", facade.Step,
+                                        notificationParams, true);
+
+                                entity.PlayerEntityLogic?.ShowNotification(notification);
+                            }
                         }
                     }
                 }

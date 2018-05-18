@@ -1,45 +1,54 @@
-﻿using NimbusFox.PowerAPI.Classes;
-using NimbusFox.PowerAPI.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using NimbusFox.PowerAPI.Hooks;
 using NimbusFox.PowerAPI.Tiles.Logic;
 using Plukit.Base;
 using Staxel.Logic;
+using Staxel.Rendering;
 using Staxel.Tiles;
+using Staxel.TileStates;
 using Staxel.TileStates.Docks;
 
 namespace NimbusFox.PowerAPI.Tiles.Builders {
-    public class ChargeableTileStateEntityBuilder : DockTileStateEntityBuilder, IEntityPainterBuilder, IEntityLogicBuilder2, IEntityLogicBuilder {
-        public new static string KindCode => "nimbusfox.powerapi.tileStateEntity.Chargeable";
-        public new string Kind => ChargeableTileStateEntityBuilder.KindCode;
+    public class ChargeableTileStateEntityBuilder : IEntityPainterBuilder, IEntityLogicBuilder2, IEntityLogicBuilder {
+        public static string KindCode => "nimbusfox.powerapi.tileStateEntity.cable";
+        public string Kind => KindCode;
+        public bool IsTileStateEntityKind() {
+            return true;
+        }
+
+        public void Dispose() { }
+        EntityPainter IEntityPainterBuilder.Instance() {
+            return new BasicTileStateEntityPainter();
+        }
 
         EntityLogic IEntityLogicBuilder.Instance(Entity entity, bool server) {
             return new ChargeableTileStateEntityLogic(entity);
         }
 
-        EntityPainter IEntityPainterBuilder.Instance() {
-            return new DockTileStateEntityPainter(this);
+        public void Load() {
+
         }
 
-        public new static Entity Spawn(EntityUniverseFacade facade, Tile tile, Vector3I location) {
+        public static Entity Spawn(Vector3I location, Tile tile, Universe facade) {
             var entity = new Entity(facade.AllocateNewEntityId(), false, KindCode, true);
 
-            entity.Construct(GetBaseBlob(tile, location), facade);
-
-            facade.AddEntity(entity);
-
-            PowerDockHook.AddLocation(location);
-            
-            return entity;
-        }
-
-        public static Blob GetBaseBlob(Tile tile, Vector3I location) {
             var blob = BlobAllocator.Blob(true);
             blob.SetString("tile", tile.Configuration.Code);
             blob.SetLong("variant", tile.Variant());
             blob.FetchBlob("location").SetVector3I(location);
             blob.FetchBlob("velocity").SetVector3D(Vector3D.Zero);
 
-            return blob;
+            entity.Construct(blob, facade);
+
+            facade.AddEntity(entity);
+
+            PowerDockHook.AddLocation(location);
+
+            return entity;
         }
     }
 }
