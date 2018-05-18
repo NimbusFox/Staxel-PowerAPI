@@ -1,5 +1,6 @@
 ﻿using NimbusFox.PowerAPI.Items;
 using Plukit.Base;
+using Staxel;
 using Staxel.Docks;
 using Staxel.Effects;
 using Staxel.Logic;
@@ -9,6 +10,8 @@ using Staxel.TileStates.Docks;
 namespace NimbusFox.PowerAPI.Tiles.DockSites {
     public class ChargeableDockSite : DockSite {
         public ChargeableDockSite(Entity entity, DockSiteId id, DockSiteConfiguration dockSiteConfig) : base(entity, id, dockSiteConfig) { }
+
+        private string _oldItemCode = "";
 
         public override bool TryDock(Entity user, EntityUniverseFacade facade, ItemStack stack, uint rotation) {
             if (CanDock(stack) <= 0) {
@@ -39,6 +42,24 @@ namespace NimbusFox.PowerAPI.Tiles.DockSites {
             }
 
             return base.CanDock(stack);
+        }
+
+        public override void Update(Timestep timestep, EntityUniverseFacade universe) {
+            base.Update(timestep, universe);
+
+            if (DockedItem.Stack.Item is ChargeableItem chargeable) {
+                if (_oldItemCode != chargeable.Configuration.Code) {
+                    var newItem = (ChargeableItem)GameContext.ItemDatabase.InstanceFromItemConfiguration(chargeable.Configuration);
+
+                    newItem.SetPower(chargeable.ItemPower.CurrentCharge);
+
+                    EmptyWithoutExploding(universe);
+
+                    AddToDock(_entity, new ItemStack(newItem, 1));
+
+                    EffectQueue.StopAll();
+                }
+            }
         }
 
         public static string Name => "chargeable";

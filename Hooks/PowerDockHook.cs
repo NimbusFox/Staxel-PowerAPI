@@ -47,7 +47,7 @@ namespace NimbusFox.PowerAPI.Hooks {
                         if (logic is ChargeableTileStateEntityLogic dockLogic) {
                             var batteryDocks = dockLogic.DockSites.Where(x => x is BatteryDockSite && !x.DockedItem.Stack.IsNull())
                     .Select(x => x.DockedItem.Stack.Item).ToList();
-                            var chargeableDocks = dockLogic.DockSites.Where(x => x is ChargeableDockSite && x is BatteryDockSite == false && !x.DockedItem.Stack.IsNull())
+                            var chargeableDocks = dockLogic.DockSites.Where(x => x is ChargeableDockSite && x is BatteryDockSite == false && x is CapacitorDockSite == false && !x.DockedItem.Stack.IsNull())
                                 .Select(x => x.DockedItem.Stack.Item).ToList();
 
                             PermitRemove = true;
@@ -78,7 +78,7 @@ namespace NimbusFox.PowerAPI.Hooks {
                                         }
                                     }
 
-                                    if (transfered != battery.ItemPower.TransferRate.Out) {
+                                    if (transfered != battery.ItemPower.TransferRate.Out && dockLogic.TilePower != null) {
                                         var iToTransfer = dockLogic.TilePower.GetTransferIn(toTransfer - transfered);
                                         var newCharge = dockLogic.TilePower.CurrentCharge + iToTransfer;
                                         if (newCharge > dockLogic.TilePower.MaxCharge) {
@@ -94,29 +94,32 @@ namespace NimbusFox.PowerAPI.Hooks {
                                 }
                             }
 
-                            var tileTransfer = dockLogic.TilePower.GetTransferOut();
-                            var tileTransfered = 0L;
+                            if (dockLogic.TilePower != null) {
+                                var tileTransfer = dockLogic.TilePower.GetTransferOut();
+                                var tileTransfered = 0L;
 
-                            foreach (var item in chargeableDocks) {
-                                var chargeable = (ChargeableItem)item;
-                                if (chargeable.ItemPower.CurrentCharge != chargeable.ItemPower.MaxCharge) {
-                                    var iToTransfer = chargeable.ItemPower.GetTransferIn(tileTransfer - tileTransfered);
-                                    var newCharge = chargeable.ItemPower.CurrentCharge + iToTransfer;
-                                    if (newCharge > chargeable.ItemPower.MaxCharge) {
-                                        chargeable.SetPower(chargeable.ItemPower.MaxCharge);
-                                        tileTransfered += newCharge - chargeable.ItemPower.MaxCharge;
-                                    } else {
-                                        tileTransfered = iToTransfer;
-                                        chargeable.SetPower(newCharge);
-                                    }
+                                foreach (var item in chargeableDocks) {
+                                    var chargeable = (ChargeableItem) item;
+                                    if (chargeable.ItemPower.CurrentCharge != chargeable.ItemPower.MaxCharge) {
+                                        var iToTransfer =
+                                            chargeable.ItemPower.GetTransferIn(tileTransfer - tileTransfered);
+                                        var newCharge = chargeable.ItemPower.CurrentCharge + iToTransfer;
+                                        if (newCharge > chargeable.ItemPower.MaxCharge) {
+                                            chargeable.SetPower(chargeable.ItemPower.MaxCharge);
+                                            tileTransfered += newCharge - chargeable.ItemPower.MaxCharge;
+                                        } else {
+                                            tileTransfered = iToTransfer;
+                                            chargeable.SetPower(newCharge);
+                                        }
 
-                                    if (tileTransfered == tileTransfer) {
-                                        break;
+                                        if (tileTransfered == tileTransfer) {
+                                            break;
+                                        }
                                     }
                                 }
-                            }
 
-                            dockLogic.TilePower.RemovePower(tileTransfered);
+                                dockLogic.TilePower.RemovePower(tileTransfered);
+                            }
                         }
                     } else {
                         if (PermitRemove) {

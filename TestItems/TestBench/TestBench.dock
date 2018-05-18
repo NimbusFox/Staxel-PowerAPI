@@ -3,7 +3,7 @@
     "allowStacksForAllSites": false,
     "sites": [
         {
-            "siteName": "battery1",
+            "siteName": "capacitor",
             "location": {
                 "x": 0.25,
                 "y": 0.55,
@@ -29,6 +29,20 @@
                 "y": 0.0,
                 "z": 0.0
             }
+        },
+        {
+            "siteName": "battery1",
+            "location": {
+                "x": -0.25,
+                "y": 0.55,
+                "z": -0.25
+            },
+            "compact": true,
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0 
+            } 
         }
     ],
     "validDockables": [

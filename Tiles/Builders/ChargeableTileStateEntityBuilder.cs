@@ -1,7 +1,7 @@
-﻿using NimbusFox.PowerAPI.Components;
+﻿using NimbusFox.PowerAPI.Classes;
+using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Hooks;
 using NimbusFox.PowerAPI.Tiles.Logic;
-using NimbusFox.PowerAPI.Tiles.Painters;
 using Plukit.Base;
 using Staxel.Logic;
 using Staxel.Tiles;
@@ -13,11 +13,11 @@ namespace NimbusFox.PowerAPI.Tiles.Builders {
         public new string Kind => ChargeableTileStateEntityBuilder.KindCode;
 
         EntityLogic IEntityLogicBuilder.Instance(Entity entity, bool server) {
-            return new ChargeableTileStateEntityLogic(entity, server);
+            return new ChargeableTileStateEntityLogic(entity);
         }
 
         EntityPainter IEntityPainterBuilder.Instance() {
-            return new ChargeableTileEntityPainter();
+            return new DockTileStateEntityPainter(this);
         }
 
         public new static Entity Spawn(EntityUniverseFacade facade, Tile tile, Vector3I location) {
@@ -26,25 +26,6 @@ namespace NimbusFox.PowerAPI.Tiles.Builders {
             entity.Construct(GetBaseBlob(tile, location), facade);
 
             facade.AddEntity(entity);
-
-            if (tile.Configuration.Components.Contains<ChargeableComponent>()) {
-                var component = tile.Configuration.Components.Get<ChargeableComponent>();
-
-                var current = entity.Blob.FetchBlob("chargeable");
-
-                var transfer = current.FetchBlob("transfer");
-
-                current.SetLong("maxCharge", component.MaxCharge);
-
-                transfer.SetLong("in", component.TransferRate.In);
-                transfer.SetLong("out", component.TransferRate.Out);
-
-                var chargeModels = current.FetchBlob("chargeModels");
-
-                foreach (var charge in component.ChargeModels) {
-                    chargeModels.SetString(charge.Key.ToString(), charge.Value);
-                }
-            }
 
             PowerDockHook.AddLocation(location);
             

@@ -19,11 +19,11 @@ namespace NimbusFox.PowerAPI.Tiles.DockSites {
                 if (battery.ItemPower.CurrentCharge == 0) {
                     return 0;
                 }
-            } else {
-                return 0;
+
+                return 1;
             }
 
-            return base.CanDock(stack);
+            return 0;
         }
 
         public new static string Name => "battery";

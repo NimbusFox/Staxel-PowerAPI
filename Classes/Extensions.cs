@@ -40,7 +40,7 @@ namespace NimbusFox.PowerAPI.Classes {
                         var item = stack.SingularItem();
 
                         if (item is ChargeableItem chargeable) {
-                            if (chargeable is BatteryItem == false) {
+                            if (chargeable is BatteryItem == false && chargeable is CapacitorItem == false) {
                                 list.Add(chargeable);
                             }
                         }
@@ -82,7 +82,7 @@ namespace NimbusFox.PowerAPI.Classes {
                         var item = stack.SingularItem();
 
                         if (item is ChargeableItem chargeable) {
-                            if (chargeable is BatteryItem == false) {
+                            if (chargeable is BatteryItem == false && chargeable is CapacitorItem == false) {
                                 list.Add(chargeable);
                             }
                         }

@@ -1,0 +1,38 @@
+{
+    "categories": [
+        "technology",
+        "tech",
+        "capacitor"
+    ],
+    "code": "nimbusfox.powerapi.debug.capacitor.0",
+    "icon": "mods/Power API/TestItems/Capacitor/capacitor1_0.qb",
+    "inHand": "mods/Power API/TestItems/Capacitor/capacitor1_0.qb",
+    "inHandOffset": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "inHandRotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": -1.56
+    },
+    "isDockable": true,
+    "kind": "nimbusfox.powerapi.item.capacitor",
+    "searchable": true,
+    "usageOffset": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "battery": {
+        "descriptionCode": "nimbusfox.powerapi.debugItem.description",
+        "chargeModels": {
+            "0%": "nimbusfox.powerapi.debug.capacitor.0",
+            "25%": "nimbusfox.powerapi.debug.capacitor.25",
+            "50%": "nimbusfox.powerapi.debug.capacitor.50",
+            "75%": "nimbusfox.powerapi.debug.capacitor.75",
+            "100%": "nimbusfox.powerapi.debug.capacitor.100"
+        }
+    }
+}

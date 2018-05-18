@@ -1,0 +1,7 @@
+{
+    "__inherits": "mods/Power API/TestItems/Capacitor/capacitorTest.0.item",
+    "code": "nimbusfox.powerapi.debug.capacitor.100",
+    "icon": "mods/Power API/TestItems/Capacitor/capacitor1_100.qb",
+    "inHand": "mods/Power API/TestItems/Capacitor/capacitor1_100.qb",
+    "searchable": false
+}

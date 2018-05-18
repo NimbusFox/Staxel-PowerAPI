@@ -80,8 +80,8 @@ namespace NimbusFox.PowerAPI.Items {
                                 TileAccessFlags.SynchronousWait);
                             var notificationParams = new NotificationParams(2);
 
-                            notificationParams.SetString(0, $"{logic.TilePower.CurrentCharge:n0}");
-                            notificationParams.SetString(1, $"{logic.TilePower.MaxCharge:n0}");
+                            notificationParams.SetString(0, $"{logic.TilePower?.CurrentCharge ?? 0 :n0}");
+                            notificationParams.SetString(1, $"{logic.TilePower?.MaxCharge ?? 0:n0}");
 
                             var notification =
                                 GameContext.NotificationDatabase.CreateNotificationFromCode(
