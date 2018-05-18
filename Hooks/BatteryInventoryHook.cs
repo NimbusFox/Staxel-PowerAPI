@@ -19,8 +19,8 @@ namespace NimbusFox.PowerAPI.Hooks {
         private readonly Cycle _cycle = new Cycle();
 
         public void UniverseUpdateBefore(Universe universe, Timestep step) {
-            _cycle.RunCycle(() => {
-                if (universe.Server) {
+            if (universe.Server) {
+                _cycle.RunCycle(() => {
                     var players = new Lyst<Entity>();
 
                     universe.GetPlayers(players);
@@ -56,8 +56,8 @@ namespace NimbusFox.PowerAPI.Hooks {
 
                         }
                     }
-                }
-            });
+                });
+            }
         }
         public void UniverseUpdateAfter() { }
         public bool CanPlaceTile(Entity entity, Vector3I location, Tile tile, TileAccessFlags accessFlags) {

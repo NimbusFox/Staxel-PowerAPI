@@ -74,6 +74,7 @@
     <Compile Include="Hooks\BatteryInventoryHook.cs" />
     <Compile Include="Hooks\CycleHook.cs" />
     <Compile Include="Hooks\PowerDockHook.cs" />
+    <Compile Include="Interfaces\ICycleRun.cs" />
     <Compile Include="Items\BatteryItem.cs" />
     <Compile Include="Items\Builders\BatteryItemBuilder.cs" />
     <Compile Include="Items\Builders\CapacitorItemBuilder.cs" />

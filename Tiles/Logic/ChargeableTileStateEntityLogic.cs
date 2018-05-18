@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components.Tiles;
-using NimbusFox.PowerAPI.Tiles.Builders;
+using NimbusFox.PowerAPI.Hooks;
+using NimbusFox.PowerAPI.Interfaces;
 using Plukit.Base;
 using Staxel.Items;
 using Staxel.Logic;
+using Staxel.Tiles;
 using Staxel.TileStates;
 
 namespace NimbusFox.PowerAPI.Tiles.Logic {
-    public class ChargeableTileStateEntityLogic : TileStateEntityLogic {
+    public class ChargeableTileStateEntityLogic : TileStateEntityLogic, ICycleRun {
 
         public Power TilePower {
             get {
@@ -30,6 +28,10 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
                 }
             }
         }
+
+        private EntityUniverseFacade _universe;
+
+        private Cycle _cycle = new Cycle();
 
         private static readonly Dictionary<Vector3I, Power> _tilePower = new Dictionary<Vector3I, Power>();
 
@@ -52,6 +54,7 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
 
         public override void Construct(Blob arguments, EntityUniverseFacade entityUniverseFacade) {
             Location = arguments.FetchBlob("location").GetVector3I();
+            _universe = entityUniverseFacade;
             if (TilePower == null) {
                 TilePower = new Power(ModelUpdate);
             }
@@ -60,6 +63,7 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
                     TilePower.GetPowerFromComponent(tile.Configuration.Components.Get<CableTileComponent>());
                 }
             }
+            CycleHook.AddCycle(this);
         }
         public override void Bind() { }
         public override bool Interactable() {
@@ -117,6 +121,46 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
 
         private void ModelUpdate(bool update) {
 
+        }
+
+        public Dictionary<Tile, ChargeableTileStateEntityLogic> GetAdjacentTiles() {
+            var surrounding = new List<Vector3I> {
+                new Vector3I(Location.X + 1, Location.Y, Location.Z),
+                new Vector3I(Location.X - 1, Location.Y, Location.Z),
+                new Vector3I(Location.X, Location.Y + 1, Location.Z),
+                new Vector3I(Location.X, Location.Y - 1, Location.Z),
+                new Vector3I(Location.X, Location.Y, Location.Z + 1),
+                new Vector3I(Location.X, Location.Y, Location.Z - 1)
+            };
+
+            var output = new Dictionary<Tile, ChargeableTileStateEntityLogic>();
+
+            foreach (var location in surrounding.ToArray()) {
+                if (_universe.ReadTile(location, TileAccessFlags.SynchronousWait, out var tile)) {
+                    if (tile.Configuration.Code == "staxel.tile.Sky") {
+                        surrounding.Remove(location);
+                        continue;
+                    }
+
+                    if (_universe.TryFetchTileStateEntityLogic(location, TileAccessFlags.SynchronousWait, out var logic)
+                    ) {
+                        if (logic is ChargeableTileStateEntityLogic chargeableLogic) {
+                            output.Add(tile, chargeableLogic);
+                            continue;
+                        }
+
+                        surrounding.Remove(location);
+                    }
+                } else {
+                    surrounding.Remove(location);
+                }
+            }
+
+            return output;
+        }
+
+        public void RunCycle() {
+            
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using NimbusFox.PowerAPI.Classes;
+using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items;
 using Plukit.Base;
 using Staxel.Items;
@@ -16,6 +19,14 @@ namespace NimbusFox.PowerAPI.Hooks {
         public void GameContextDeinitialize() { }
         public void GameContextReloadBefore() { }
         public void GameContextReloadAfter() { }
+
+        private static List<ICycleRun> _cycles = new List<ICycleRun>();
+
+        public static void AddCycle(ICycleRun cycleRun) {
+            if (!_cycles.Contains(cycleRun)) {
+                _cycles.Add(cycleRun);
+            }
+        }
 
         private DateTime _secondTick = DateTime.Now;
 
@@ -53,6 +64,8 @@ namespace NimbusFox.PowerAPI.Hooks {
 
                         _secondTick = DateTime.Now;
                     }
+                    
+                    _cycles.ForEach(x => x.RunCycle());
                 }
             }
         }

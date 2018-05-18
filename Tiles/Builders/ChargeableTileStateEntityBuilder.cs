@@ -46,8 +46,6 @@ namespace NimbusFox.PowerAPI.Tiles.Builders {
 
             facade.AddEntity(entity);
 
-            PowerDockHook.AddLocation(location);
-
             return entity;
         }
     }

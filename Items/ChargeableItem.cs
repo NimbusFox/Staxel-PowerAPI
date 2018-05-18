@@ -33,7 +33,7 @@ namespace NimbusFox.PowerAPI.Items {
             ItemPower = new Power(UpdateModel);
 
             if (HasToolComponent(Configuration.Components)) {
-                var component = Configuration.Components.Contains<BatteryComponent>() ? Configuration.Components.Get<BatteryComponent>() : Configuration.Components.Get<ChargeableComponent>();
+                var component = Configuration.Components.Select<ChargeableComponent>().First();
                 
                 ItemPower = Power.GetTilePowerFromBlob(component.GetBlob(), UpdateModel);
                 DescriptionCode = component.DescriptionCode;
@@ -64,7 +64,7 @@ namespace NimbusFox.PowerAPI.Items {
         }
 
         public override bool HasAssociatedToolComponent(Plukit.Base.Components components) {
-            return components.Contains<ChargeableComponent>() || components.Contains<BatteryComponent>();
+            return components.Select<ChargeableComponent>().Any();
         }
 
         public override void StorePersistenceData(Blob blob) {

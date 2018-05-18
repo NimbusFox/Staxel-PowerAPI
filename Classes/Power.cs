@@ -30,6 +30,8 @@ namespace NimbusFox.PowerAPI.Classes {
 
         public IReadOnlyDictionary<int, string> Models { get; private set; }
 
+        public bool OutputToTiles { get; private set; }
+
         private Action<bool> _modelUpdate;
 
         public Power(Action<bool> modelUpdate) {
@@ -45,6 +47,8 @@ namespace NimbusFox.PowerAPI.Classes {
             _modelUpdate = modelUpdate;
 
             Models = new Dictionary<int, string>();
+
+            OutputToTiles = true;
         }
 
         public static Power GetTilePowerFromBlob(Blob blob, Action<bool> modelUpdate) {
@@ -71,6 +75,7 @@ namespace NimbusFox.PowerAPI.Classes {
                 defaults.Models = models;
             }
 
+            defaults.OutputToTiles = blob.GetBool("outputToTiles", true);
 
             return defaults;
         }
@@ -97,6 +102,8 @@ namespace NimbusFox.PowerAPI.Classes {
 
                 Models = models;
             }
+
+            OutputToTiles = blob.GetBool("outputToTiles", true);
         }
 
         public static Power GetPowerFromComponent<T>(T component, Action<bool> modelUpdate) {
