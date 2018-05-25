@@ -9,9 +9,14 @@
     "placementDirection": [
         "yn"
     ],
-    "tileStateKind": "nimbusfox.powerapi.tileState.Chargeable",
+    "tileStateKind": "nimbusfox.powerapi.tileState.dockChargeable",
     "voxels": "mods/Power API/TestItems/TestBench/TestBench.qb",
     "wallPushOut": true,
     "solid": false,
-    "dockDefinition": "nimbusfox.powerapi.docks.testbench"
+    "dockDefinition": "nimbusfox.powerapi.docks.testbench",
+    "chargeable": {
+        "outputToTiles": true,
+        "inputFromTiles": false
+    },
+    "prefetchTileState": true
 }

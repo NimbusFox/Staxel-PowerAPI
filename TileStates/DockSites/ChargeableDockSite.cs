@@ -7,7 +7,7 @@ using Staxel.Logic;
 using Staxel.Player;
 using Staxel.TileStates.Docks;
 
-namespace NimbusFox.PowerAPI.Tiles.DockSites {
+namespace NimbusFox.PowerAPI.TileStates.DockSites {
     public class ChargeableDockSite : DockSite {
         public ChargeableDockSite(Entity entity, DockSiteId id, DockSiteConfiguration dockSiteConfig) : base(entity, id, dockSiteConfig) { }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Items.Builders;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileStates.Logic;
 using Plukit.Base;
 using Staxel;
 using Staxel.Client;
@@ -69,6 +69,13 @@ namespace NimbusFox.PowerAPI.Items {
                             var destructor = DestructionEntityBuilder.Spawn(entity, target, facade, "");
                             destructor.AttemptPickup();
                             destructor.EnqueueDeferredDestructionQueue(facade.Step, target, tile);
+
+                            //if (facade.TryFetchTileStateEntityLogic(target, TileAccessFlags.SynchronousWait,
+                            //    out var logic)) {
+                            //    if (logic is ChargeableTileStateEntityLogic chargeable) {
+                            //        facade.RemoveEntity(chargeable.Entity.Id);
+                            //    }
+                            //}
                         }
                     }
                 }
@@ -77,14 +84,14 @@ namespace NimbusFox.PowerAPI.Items {
                     if (facade.ReadTile(target, TileAccessFlags.SynchronousWait, out var tile)) {
                         if (tile.Configuration.Components.Contains<WrenchableComponent>()) {
                             var logic = facade.FetchTileStateEntityLogic(target,
-                                TileAccessFlags.SynchronousWait);
+                                TileAccessFlags.SynchronousWait).GetPowerForTile(facade);
 
-                            if (logic is ChargeableDockTileStateEntityLogic dockLogic) {
+                            if (logic != null) {
 
                                 var notificationParams = new NotificationParams(2);
 
-                                notificationParams.SetString(0, $"{dockLogic.TilePower?.CurrentCharge ?? 0:n0}");
-                                notificationParams.SetString(1, $"{dockLogic.TilePower?.MaxCharge ?? 0:n0}");
+                                notificationParams.SetString(0, $"{logic.TilePower?.CurrentCharge ?? 0:n0}");
+                                notificationParams.SetString(1, $"{logic.TilePower?.MaxCharge ?? 0:n0}");
 
                                 var notification =
                                     GameContext.NotificationDatabase.CreateNotificationFromCode(
@@ -94,19 +101,19 @@ namespace NimbusFox.PowerAPI.Items {
                                 entity.PlayerEntityLogic?.ShowNotification(notification);
                             }
 
-                            if (logic is ChargeableTileStateEntityLogic tileLogic) {
-                                var notificationParams = new NotificationParams(2);
+                            //if (logic is ChargeableTileStateEntityLogic tileLogic) {
+                            //    var notificationParams = new NotificationParams(2);
 
-                                notificationParams.SetString(0, $"{tileLogic.TilePower?.CurrentCharge ?? 0:n0}");
-                                notificationParams.SetString(1, $"{tileLogic.TilePower?.MaxCharge ?? 0:n0}");
+                            //    notificationParams.SetString(0, $"{tileLogic.TilePower?.CurrentCharge ?? 0:n0}");
+                            //    notificationParams.SetString(1, $"{tileLogic.TilePower?.MaxCharge ?? 0:n0}");
 
-                                var notification =
-                                    GameContext.NotificationDatabase.CreateNotificationFromCode(
-                                        "nimbusfox.powerapi.notifications.powerInformation", facade.Step,
-                                        notificationParams, true);
+                            //    var notification =
+                            //        GameContext.NotificationDatabase.CreateNotificationFromCode(
+                            //            "nimbusfox.powerapi.notifications.powerInformation", facade.Step,
+                            //            notificationParams, true);
 
-                                entity.PlayerEntityLogic?.ShowNotification(notification);
-                            }
+                            //    entity.PlayerEntityLogic?.ShowNotification(notification);
+                            //}
                         }
                     }
                 }

@@ -25,7 +25,7 @@
         "y": 0.0,
         "z": 0.0
     },
-    "battery": {
+    "capacitor": {
         "descriptionCode": "nimbusfox.powerapi.debugItem.description",
         "chargeModels": {
             "0%": "nimbusfox.powerapi.debug.capacitor.0",
@@ -33,6 +33,12 @@
             "50%": "nimbusfox.powerapi.debug.capacitor.50",
             "75%": "nimbusfox.powerapi.debug.capacitor.75",
             "100%": "nimbusfox.powerapi.debug.capacitor.100"
-        }
+        },
+        "outputToTiles": true,
+        "maxCharge": 30000,
+        "transferRate": {
+            "in": 512,
+            "out": 512 
+        } 
     }
 }

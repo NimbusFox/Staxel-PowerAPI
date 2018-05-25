@@ -30,7 +30,9 @@ namespace NimbusFox.PowerAPI.Classes {
 
         public IReadOnlyDictionary<int, string> Models { get; private set; }
 
-        public bool OutputToTiles { get; private set; }
+        public bool OutputToTiles { get; internal set; }
+
+        public bool InputFromTiles { get; internal set; }
 
         private Action<bool> _modelUpdate;
 
@@ -47,8 +49,6 @@ namespace NimbusFox.PowerAPI.Classes {
             _modelUpdate = modelUpdate;
 
             Models = new Dictionary<int, string>();
-
-            OutputToTiles = true;
         }
 
         public static Power GetTilePowerFromBlob(Blob blob, Action<bool> modelUpdate) {
@@ -63,6 +63,9 @@ namespace NimbusFox.PowerAPI.Classes {
 
             defaults.MaxCharge = blob.GetLong("maxCharge", 30000);
 
+            defaults.OutputToTiles = blob.GetBool("outputToTiles", false);
+            defaults.InputFromTiles = blob.GetBool("inputFromTiles", true);
+
             if (blob.Contains("chargeModels")) {
                 var models = new Dictionary<int, string>();
 
@@ -74,8 +77,6 @@ namespace NimbusFox.PowerAPI.Classes {
 
                 defaults.Models = models;
             }
-
-            defaults.OutputToTiles = blob.GetBool("outputToTiles", true);
 
             return defaults;
         }
@@ -91,6 +92,9 @@ namespace NimbusFox.PowerAPI.Classes {
 
             MaxCharge = blob.GetLong("maxCharge", 30000);
 
+            OutputToTiles = blob.GetBool("outputToTiles", false);
+            InputFromTiles = blob.GetBool("inputFromTiles", true);
+
             if (blob.Contains("chargeModels")) {
                 var models = new Dictionary<int, string>();
 
@@ -102,8 +106,6 @@ namespace NimbusFox.PowerAPI.Classes {
 
                 Models = models;
             }
-
-            OutputToTiles = blob.GetBool("outputToTiles", true);
         }
 
         public static Power GetPowerFromComponent<T>(T component, Action<bool> modelUpdate) {
@@ -113,6 +115,8 @@ namespace NimbusFox.PowerAPI.Classes {
                 defaults.TransferRate = chargeable.TransferRate;
                 defaults.MaxCharge = chargeable.MaxCharge;
                 defaults.Models = chargeable.ChargeModels;
+                defaults.OutputToTiles = chargeable.OutputToTiles;
+                defaults.InputFromTiles = chargeable.InputFromTiles;
             }
 
             return null;
@@ -123,6 +127,8 @@ namespace NimbusFox.PowerAPI.Classes {
                 TransferRate = chargeable.TransferRate;
                 MaxCharge = chargeable.MaxCharge;
                 Models = chargeable.ChargeModels;
+                OutputToTiles = chargeable.OutputToTiles;
+                InputFromTiles = chargeable.InputFromTiles;
             }
         }
 

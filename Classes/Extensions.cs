@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items;
+using NimbusFox.PowerAPI.TileStates.Logic;
+using Staxel;
 using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Player;
@@ -91,6 +94,28 @@ namespace NimbusFox.PowerAPI.Classes {
             }
 
             return list;
+        }
+
+        public static ITileWithPower GetPowerForTile(this object target, EntityUniverseFacade facade) {
+            if (target is ITileWithPower power) {
+                return power;
+            }
+
+            if (target is ChargeableTileStateEntityLogic logic) {
+                var id = logic.GetOwner();
+
+                if (id == EntityId.NullEntityId) {
+                    return null;
+                }
+
+                if (facade.TryGetEntity(id, out var entity)) {
+                    if (entity.Logic is ITileWithPower tilePower) {
+                        return tilePower;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

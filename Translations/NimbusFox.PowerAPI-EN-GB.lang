@@ -2,8 +2,7 @@
 language=English
 
 nimbusfox.powerapi.perCycle=/cycle
-nimbusfox.powerapi.verb.singular=Watt
-nimbusfox.powerapi.verb.plural=Watts
+nimbusfox.powerapi.verb.power=Watts
 nimbusfox.powerapi.verb.changeMode=Mode Change
 nimbusfox.powerapi.verb.rotate=Rotate
 nimbusfox.powerapi.verb.pickUp=Pick Up

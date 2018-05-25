@@ -38,8 +38,8 @@ namespace NimbusFox.PowerAPI.Hooks {
                                     var iToTransfer = chargeable.ItemPower.GetTransferIn(toTransfer - transfered);
                                     var newCharge = chargeable.ItemPower.CurrentCharge + iToTransfer;
                                     if (newCharge > chargeable.ItemPower.MaxCharge) {
+                                        transfered += chargeable.ItemPower.MaxCharge - chargeable.ItemPower.CurrentCharge;
                                         chargeable.SetPower(chargeable.ItemPower.MaxCharge);
-                                        transfered += newCharge - chargeable.ItemPower.MaxCharge;
                                     } else {
                                         transfered = iToTransfer;
                                         chargeable.SetPower(newCharge);

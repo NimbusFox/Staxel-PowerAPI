@@ -89,7 +89,7 @@ namespace NimbusFox.PowerAPI.Items {
 
             return string.Format(text, ItemPower.CurrentCharge, ItemPower.MaxCharge, ItemPower.TransferRate.In, ItemPower.TransferRate.Out,
                 lang.GetTranslationString("nimbusfox.powerapi.perCycle"),
-                lang.GetTranslationString("nimbusfox.powerapi.verb.plural"));
+                lang.GetTranslationString("nimbusfox.powerapi.verb.power"));
         }
 
         public override ItemRenderer FetchRenderer() {

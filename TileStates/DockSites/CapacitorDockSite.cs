@@ -8,7 +8,7 @@ using Staxel.Docks;
 using Staxel.Logic;
 using Staxel.TileStates.Docks;
 
-namespace NimbusFox.PowerAPI.Tiles.DockSites {
+namespace NimbusFox.PowerAPI.TileStates.DockSites {
     public class CapacitorDockSite : ChargeableDockSite {
         public CapacitorDockSite(Entity entity, DockSiteId id, DockSiteConfiguration dockSiteConfig) : base(entity, id, dockSiteConfig) { }
 

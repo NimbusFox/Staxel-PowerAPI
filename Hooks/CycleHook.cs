@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items;
 using Plukit.Base;
+using Staxel;
 using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Modding;
@@ -12,19 +15,35 @@ using Staxel.Tiles;
 
 namespace NimbusFox.PowerAPI.Hooks {
     public class CycleHook : IModHookV3 {
-        public void Dispose() { }
+        public void Dispose() {
+        }
         public void GameContextInitializeInit() { }
         public void GameContextInitializeBefore() { }
-        public void GameContextInitializeAfter() { }
-        public void GameContextDeinitialize() { }
-        public void GameContextReloadBefore() { }
-        public void GameContextReloadAfter() { }
 
-        private static List<ICycleRun> _cycles = new List<ICycleRun>();
+        public void GameContextInitializeAfter() {
+        }
 
-        public static void AddCycle(ICycleRun cycleRun) {
-            if (!_cycles.Contains(cycleRun)) {
-                _cycles.Add(cycleRun);
+        public void GameContextDeinitialize() {
+        }
+
+        public void GameContextReloadBefore() {
+        }
+
+        public void GameContextReloadAfter() {
+
+        }
+
+        private static readonly List<Vector3I> Cycles = new List<Vector3I>();
+
+        public static void AddCycle(Vector3I cycleRun) {
+            if (!Cycles.Contains(cycleRun)) {
+                Cycles.Add(cycleRun);
+            }
+        }
+
+        public static void RemoveCycle(Vector3I cycleRun) {
+            if (!Cycles.Contains(cycleRun)) {
+                Cycles.Remove(cycleRun);
             }
         }
 
@@ -64,8 +83,17 @@ namespace NimbusFox.PowerAPI.Hooks {
 
                         _secondTick = DateTime.Now;
                     }
-                    
-                    _cycles.ForEach(x => x.RunCycle());
+
+                    //foreach (var location in new List<Vector3I>(Cycles)) {
+                    //    if (universe.TryFetchTileStateEntityLogic(location, TileAccessFlags.OverrideUnbreakable, out var logic)) {
+                    //        var logicParse = logic.GetPowerForTile(universe);
+                    //        if (logicParse != null) {
+                    //            logicParse.Cycle.RunCycle(logicParse.RunCycle);
+                    //        } else {
+                    //            Cycles.Remove(location);
+                    //        }
+                    //    }
+                    //}
                 }
             }
         }

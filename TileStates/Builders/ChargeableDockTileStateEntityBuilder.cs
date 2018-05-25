@@ -1,15 +1,16 @@
-﻿using NimbusFox.PowerAPI.Classes;
+﻿using System.Linq;
+using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Hooks;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileStates.Logic;
 using Plukit.Base;
 using Staxel.Logic;
 using Staxel.Tiles;
 using Staxel.TileStates.Docks;
 
-namespace NimbusFox.PowerAPI.Tiles.Builders {
+namespace NimbusFox.PowerAPI.TileStates.Builders {
     public class ChargeableDockTileStateEntityBuilder : DockTileStateEntityBuilder, IEntityPainterBuilder, IEntityLogicBuilder2, IEntityLogicBuilder {
-        public new static string KindCode => "nimbusfox.powerapi.tileStateEntity.Chargeable";
+        public new static string KindCode => "nimbusfox.powerapi.tileStateEntity.dockChargeable";
         public new string Kind => ChargeableDockTileStateEntityBuilder.KindCode;
 
         EntityLogic IEntityLogicBuilder.Instance(Entity entity, bool server) {

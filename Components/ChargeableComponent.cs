@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Items.Builders;
 using Plukit.Base;
 
 namespace NimbusFox.PowerAPI.Components {
     public class ChargeableComponent {
-        public long MaxCharge { get; internal set; }
+        public long MaxCharge { get; }
         public TransferRate TransferRate { get; }
         public Dictionary<int, string> ChargeModels { get; }
         public string DescriptionCode { get; }
+        public virtual bool OutputToTiles { get; }
+        public virtual bool InputFromTiles { get; }
+        public string PowerVerb { get; }
+        public IReadOnlyList<string> CompatiblePower { get; }
         private Blob _blob;
 
         public ChargeableComponent(Blob config, long maxCharge = 300000, long transferIn = 128, long transferOut = 128) {
@@ -17,6 +22,16 @@ namespace NimbusFox.PowerAPI.Components {
             ChargeModels = new Dictionary<int, string>();
             TransferRate = new TransferRate();
             DescriptionCode = config.GetString("descriptionCode", null);
+            OutputToTiles = config.GetBool("outputToTiles", false);
+            InputFromTiles = config.GetBool("inputFromTiles", true);
+
+            PowerVerb = config.GetString("powerVerb", "nimbusfox.powerapi.verb.power");
+
+            try {
+                CompatiblePower = config.GetStringList("compatiblePower").ToList();
+            } catch {
+                CompatiblePower = new List<string> {PowerVerb};
+            }
 
             if (!config.Contains("transferRate")) {
                 TransferRate.In = transferIn;
