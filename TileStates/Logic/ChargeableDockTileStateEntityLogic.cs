@@ -84,6 +84,8 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
             //PowerDatabase.SetPower(Location, TilePower.CurrentCharge);
         }
 
+        public void AddIgnore(Vector3I location) { }
+
         public IReadOnlyList<DockSite> DockSites => _dockSites;
 
         public Cycle Cycle { get; } = new Cycle();
@@ -159,22 +161,20 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
                         continue;
                     }
 
-                    if (_universe.TryFetchTileStateEntityLogic(location, TileAccessFlags.SynchronousWait, out var logic)
-                    ) {
-                        if (logic is ITileWithPower chargeableDockLogic) {
-                            if (ignoreFull) {
-                                if (chargeableDockLogic.TilePower.CurrentCharge != chargeableDockLogic.TilePower.MaxCharge && chargeableDockLogic.InputFromTiles) {
-                                    output.Add(chargeableDockLogic.TilePower);
-                                }
-
-                                continue;
+                    var logic = _universe.FetchTileStateEntityLogic(location, TileAccessFlags.SynchronousWait).GetPowerForTile(_universe);
+                    if (logic != null) {
+                        if (ignoreFull) {
+                            if (logic.GetPower() != logic.TilePower?.MaxCharge && logic.InputFromTiles) {
+                                output.Add(logic.TilePower);
                             }
 
-                            if (chargeableDockLogic.InputFromTiles) {
-                                output.Add(chargeableDockLogic.TilePower);
-                            }
                             continue;
                         }
+
+                        if (logic.InputFromTiles) {
+                            output.Add(logic.TilePower);
+                        }
+                        continue;
                     }
                 }
             }

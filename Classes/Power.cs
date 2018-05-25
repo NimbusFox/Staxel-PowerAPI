@@ -44,7 +44,7 @@ namespace NimbusFox.PowerAPI.Classes {
 
             CurrentCharge = 0;
 
-            MaxCharge = 30000;
+            MaxCharge = long.MaxValue;
 
             _modelUpdate = modelUpdate;
 

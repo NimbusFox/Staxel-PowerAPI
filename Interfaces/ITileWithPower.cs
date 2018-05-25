@@ -1,4 +1,5 @@
 ﻿using NimbusFox.PowerAPI.Classes;
+using Plukit.Base;
 
 namespace NimbusFox.PowerAPI.Interfaces {
     public interface ITileWithPower : ICycleRun {
@@ -9,5 +10,6 @@ namespace NimbusFox.PowerAPI.Interfaces {
         long GetPower();
         void AddPower(long power);
         void RemovePower(long power);
+        void AddIgnore(Vector3I location);
     }
 }

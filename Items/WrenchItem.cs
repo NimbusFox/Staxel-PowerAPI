@@ -65,6 +65,12 @@ namespace NimbusFox.PowerAPI.Items {
                 if (entity.PlayerEntityLogic.LookingAtTile(out var target, out _)) {
                     if (facade.ReadTile(target, TileAccessFlags.SynchronousWait, out var tile)) {
                         if (tile.Configuration.Components.Contains<WrenchableComponent>()) {
+                            var logic = facade.FetchTileStateEntityLogic(target,
+                                TileAccessFlags.SynchronousWait).GetPowerForTile(facade);
+
+                            if (logic != null) {
+                                facade.RemoveEntity(logic.Entity.Id);
+                            }
 
                             var destructor = DestructionEntityBuilder.Spawn(entity, target, facade, "");
                             destructor.AttemptPickup();

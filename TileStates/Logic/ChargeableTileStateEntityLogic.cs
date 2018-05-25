@@ -25,9 +25,22 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
         public ChargeableTileStateEntityLogic(Entity entity) : base(entity) {
             Entity.Physics.PriorityChunkRadius(0, false);
         }
-        public override void PreUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) { }
+        public override void PreUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
+        }
 
         public override void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
+        }
+
+        public override void PostUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
+            Tile result;
+            if (!entityUniverseFacade.ReadTile(Location, TileAccessFlags.None, out result) || result.Configuration == Configuration)
+                return;
+        }
+
+        public override void Construct(Blob arguments, EntityUniverseFacade entityUniverseFacade) {
+            _despawn = arguments.GetBool("despawn", false);
+            Location = arguments.FetchBlob("location").GetVector3I();
+            Configuration = GameContext.TileDatabase.GetTileConfiguration(arguments.GetString("tile"));
             if (_logicOwner == EntityId.NullEntityId) {
                 var blob = BlobAllocator.Blob(true);
 
@@ -53,23 +66,12 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
 
                 if (tileEntity != default(Entity)) {
                     _logicOwner = tileEntity.Id;
+                    tileEntity.Logic.Construct(blob, entityUniverseFacade);
                 } else {
                     _logicOwner = ChargeableTileEntityBuilder.Spawn(Location, blob, entityUniverseFacade).Id;
                 }
 
             }
-        }
-
-        public override void PostUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
-            Tile result;
-            if (!entityUniverseFacade.ReadTile(Location, TileAccessFlags.None, out result) || result.Configuration == Configuration)
-                return;
-        }
-
-        public override void Construct(Blob arguments, EntityUniverseFacade entityUniverseFacade) {
-            _despawn = arguments.GetBool("despawn", false);
-            Location = arguments.FetchBlob("location").GetVector3I();
-            Configuration = GameContext.TileDatabase.GetTileConfiguration(arguments.GetString("tile"));
         }
         public override void Bind() { }
         public override bool Interactable() {
