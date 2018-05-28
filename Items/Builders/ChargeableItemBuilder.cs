@@ -30,8 +30,6 @@ namespace NimbusFox.PowerAPI.Items.Builders {
             return KindCode();
         }
 
-        public static string KindCode() {
-            return "nimbusfox.powerapi.item.chargeable";
-        } 
+        public static string KindCode() =>"nimbusfox.powerapi.item.chargeable";
     }
 }

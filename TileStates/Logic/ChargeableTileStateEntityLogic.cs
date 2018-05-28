@@ -66,8 +66,8 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
 
                 if (tileEntity != default(Entity)) {
                     _logicOwner = tileEntity.Id;
-                    tileEntity.Logic.Construct(blob, entityUniverseFacade);
                 } else {
+
                     _logicOwner = ChargeableTileEntityBuilder.Spawn(Location, blob, entityUniverseFacade).Id;
                 }
 
@@ -85,11 +85,11 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
             entity.PlayerEntityLogic.NextAction(Configuration.InteractActionTrigger);
         }
         public override bool CanChangeActiveItem() {
-            return true;
+            return false;
         }
 
         public override bool IsPersistent() {
-            return true;
+            return false;
         }
 
         public override bool IsLingering() {
@@ -104,7 +104,7 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
             KeepAlive();
         }
         public override bool IsBeingLookedAt() {
-            return true;
+            return false;
         }
 
         public EntityId GetOwner() {

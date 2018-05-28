@@ -123,7 +123,7 @@ namespace NimbusFox.PowerAPI.Classes {
         }
 
         public void GetPowerFromComponent<T>(T component) {
-            if (component is CableTileComponent chargeable) {
+            if (component is ChargeableComponent chargeable) {
                 TransferRate = chargeable.TransferRate;
                 MaxCharge = chargeable.MaxCharge;
                 Models = chargeable.ChargeModels;

@@ -1,0 +1,6 @@
+﻿{
+    "__inherits": "staxel/notifications/GeneralNotification.config",
+    "code": "nimbusfox.powerapi.notifications.lightInformation",
+    "translationCode": "nimbusfox.powerapi.notifications.lightInformation.text",
+    "icon": "staxel/notifications/icons/NoticeIcon.png"
+}

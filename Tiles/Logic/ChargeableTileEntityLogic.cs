@@ -2,25 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using NimbusFox.PowerAPI.Classes;
-using NimbusFox.PowerAPI.Components.Tiles;
-//using NimbusFox.PowerAPI.Database;
-using NimbusFox.PowerAPI.Hooks;
+using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Interfaces;
 using Plukit.Base;
 using Staxel;
 using Staxel.Core;
 using Staxel.Items;
 using Staxel.Logic;
-using Staxel.Tiles;
-using Staxel.TileStates;
 
 namespace NimbusFox.PowerAPI.Tiles.Logic {
     public class ChargeableTileEntityLogic : EntityLogic, ITileWithPower {
 
         public void SetPower(long power) {
             TilePower.SetPower(power);
-
-            //PowerDatabase.SetPower(Location, TilePower.CurrentCharge);
         }
 
         public long GetPower() {
@@ -29,14 +23,10 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
 
         public void AddPower(long power) {
             TilePower.AddPower(power);
-
-            //PowerDatabase.SetPower(Location, TilePower.CurrentCharge);
         }
 
         public void RemovePower(long power) {
             TilePower.RemovePower(power);
-
-            //PowerDatabase.SetPower(Location, TilePower.CurrentCharge);
         }
 
         public void AddIgnore(Vector3I location) {
@@ -45,7 +35,7 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
             }
         }
 
-        private List<Vector3I> _ignoreInputs = new List<Vector3I>();
+        private readonly List<Vector3I> _ignoreInputs = new List<Vector3I>();
 
         public Power TilePower { get; private set; }
 
@@ -70,10 +60,18 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
         }
 
         public override void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
+            if (TilePower == null) {
+                return;
+            }
             if (entityUniverseFacade.ReadTile(Location, TileAccessFlags.SynchronousWait, out var tile)) {
-                if (tile.Configuration.Components.Contains<CableTileComponent>()) {
-                    TilePower.GetPowerFromComponent(tile.Configuration.Components.Get<CableTileComponent>());
+                if (tile.Configuration.Components.Contains<ChargeableComponent>()) {
+                    TilePower.GetPowerFromComponent(tile.Configuration.Components.Get<ChargeableComponent>());
                 }
+            }
+
+            if (_charge != 0) {
+                TilePower.AddPower(_charge);
+                _charge = 0;
             }
 
             Cycle.RunCycle(RunCycle);
@@ -88,19 +86,17 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
             if (TilePower == null) {
                 TilePower = new Power(ModelUpdate);
                 if (entityUniverseFacade.ReadTile(Location, TileAccessFlags.SynchronousWait, out var tile)) {
-                    if (tile.Configuration.Components.Contains<CableTileComponent>()) {
-                        TilePower.GetPowerFromComponent(tile.Configuration.Components.Get<CableTileComponent>());
+                    if (tile.Configuration.Components.Contains<ChargeableComponent>()) {
+                        TilePower.GetPowerFromComponent(tile.Configuration.Components.Get<ChargeableComponent>());
                     }
                 }
             }
 
-            if (_charge != 0) {
-                TilePower.SetPower(_charge);
-                _charge = 0;
+            if (arguments.Contains("charge")) {
+                TilePower.SetPower(arguments.GetLong("charge"));
             }
 
             Entity.Physics.ForcedPosition(Location.ToTileCenterVector3D());
-            CycleHook.AddCycle(Location);
         }
         public override void Bind() { }
         public override bool Interactable() {
@@ -139,28 +135,26 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
                 if (tile != null) {
                     var tileConfig = GameContext.TileDatabase.GetTileConfiguration(tile);
 
-                    if (tileConfig.Components.Contains<CableTileComponent>()) {
-                        TilePower.GetPowerFromComponent(tileConfig.Components.Get<CableTileComponent>());
+                    if (tileConfig.Components.Contains<ChargeableComponent>()) {
+                        TilePower.GetPowerFromComponent(tileConfig.Components.Get<ChargeableComponent>());
                     }
                 }
             }
 
-            if (_charge != 0) {
-                TilePower.SetPower(_charge);
-                _charge = 0;
+            if (Entity.Blob.Contains("currentCharge")) {
+                _charge = Entity.Blob.GetLong("currentCharge");
             }
-
-            TilePower.SetPower(Entity.Blob.GetLong("currentCharge", 0));
         }
 
         public override void StorePersistenceData(Blob data) {
             if (TilePower != null) {
-                data.SetLong("currentCharge", TilePower.CurrentCharge);
+                data.SetLong("charge", TilePower.CurrentCharge);
             }
+            data.FetchBlob("location").SetVector3I(Location);
         }
 
         public override void RestoreFromPersistedData(Blob data, EntityUniverseFacade facade) {
-            _charge = data.GetLong("currentCharge", 0);
+            Construct(data, facade);
         }
 
         public override bool IsCollidable() {
@@ -184,7 +178,7 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
                     continue;
                 }
                 if (_universe.ReadTile(location, TileAccessFlags.SynchronousWait, out var tile)) {
-                    if (tile.Configuration.Code == "staxel.tile.Sky" || !tile.Configuration.Components.Select<CableTileComponent>().Any()) {
+                    if (tile.Configuration.Code == "staxel.tile.Sky" || !tile.Configuration.Components.Select<ChargeableComponent>().Any()) {
                         continue;
                     }
 

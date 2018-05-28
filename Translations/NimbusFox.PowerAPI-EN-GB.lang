@@ -6,9 +6,11 @@ nimbusfox.powerapi.verb.power=Watts
 nimbusfox.powerapi.verb.changeMode=Mode Change
 nimbusfox.powerapi.verb.rotate=Rotate
 nimbusfox.powerapi.verb.pickUp=Pick Up
-nimbusfox.powerapi.verb.powerCheck=Check Power
+nimbusfox.powerapi.verb.powerCheck=Power
+nimbusfox.powerapi.verb.lightCheck=Light
 
 nimbusfox.powerapi.notifications.powerInformation.text=Watts: {0}/{1}
+nimbusfox.powerapi.notifications.lightInformation.text=Light:{0} Phase:{1} Reduction:{2}
 
 staxel.category.technology=Technology
 staxel.category.tech=Tech

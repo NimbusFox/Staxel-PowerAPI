@@ -1,11 +1,11 @@
-{
+﻿{
     "__inherits": "mods/Power API/Staxel/Tiles/inherit/wrenchable.json",
-    "code": "nimbusfox.powerapi.debug.cable",
+    "code": "nimbusfox.powerapi.debug.solarPanel",
     "isDockacble": false,
     "tileStateKind": "nimbusfox.powerapi.tileState.chargeable",
     "prefetchTileState": true,
     "kind": "object",
-    "voxels": "mods/Power API/TestItems/Cable/cable1.qb",
+    "voxels": "mods/Power API/TestItems/SolarPanel/solarPanel.qb",
     "wallPushOut": true,
     "solid": false,
     "chargeable": {
@@ -16,7 +16,7 @@
         }
     },
     "collision": true,
-    "orientationVariants": false,
+    "orientationVariants": true,
     "priority": 32,
     "searchable": true,
     "placementDirection": [

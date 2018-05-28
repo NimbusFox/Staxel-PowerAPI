@@ -64,8 +64,6 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
 
         public void SetPower(long power) {
             TilePower.SetPower(power);
-
-            //PowerDatabase.SetPower(Location, TilePower.CurrentCharge);
         }
 
         public long GetPower() {
@@ -74,14 +72,10 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
 
         public void AddPower(long power) {
             TilePower.AddPower(power);
-
-            //PowerDatabase.SetPower(Location, TilePower.CurrentCharge);
         }
 
         public void RemovePower(long power) {
             TilePower.RemovePower(power);
-
-            //PowerDatabase.SetPower(Location, TilePower.CurrentCharge);
         }
 
         public void AddIgnore(Vector3I location) { }

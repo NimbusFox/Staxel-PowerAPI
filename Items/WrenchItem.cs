@@ -11,6 +11,7 @@ using Plukit.Base;
 using Staxel;
 using Staxel.Client;
 using Staxel.Collections;
+using Staxel.Destruction;
 using Staxel.Entities;
 using Staxel.Items;
 using Staxel.Logic;
@@ -25,8 +26,7 @@ namespace NimbusFox.PowerAPI.Items {
 
         private enum Mode {
             PickUp = 0,
-            Rotate = 1,
-            Power = 2
+            Rotate = 1
         }
 
         private Mode _mode = Mode.PickUp;
@@ -40,15 +40,15 @@ namespace NimbusFox.PowerAPI.Items {
         }
 
         public override void Control(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) {
-            if (alt.DownClick) {
-                if (_mode == Mode.PickUp) {
-                    _mode = Mode.Power;
-                } else {
-                    _mode = Mode.PickUp;
-                }
+            //if (alt.DownClick) {
+            //    if (_mode == Mode.PickUp) {
+            //        _mode = Mode.Power;
+            //    } else {
+            //        _mode = Mode.PickUp;
+            //    }
 
-                entity.Inventory.ItemStoreNeedsStorage();
-            }
+            //    entity.Inventory.ItemStoreNeedsStorage();
+            //}
 
             if (!main.DownClick) {
                 return;
@@ -85,44 +85,6 @@ namespace NimbusFox.PowerAPI.Items {
                         }
                     }
                 }
-            } else if (_mode == Mode.Power) {
-                if (entity.PlayerEntityLogic.LookingAtTile(out var target, out _)) {
-                    if (facade.ReadTile(target, TileAccessFlags.SynchronousWait, out var tile)) {
-                        if (tile.Configuration.Components.Contains<WrenchableComponent>()) {
-                            var logic = facade.FetchTileStateEntityLogic(target,
-                                TileAccessFlags.SynchronousWait).GetPowerForTile(facade);
-
-                            if (logic != null) {
-
-                                var notificationParams = new NotificationParams(2);
-
-                                notificationParams.SetString(0, $"{logic.TilePower?.CurrentCharge ?? 0:n0}");
-                                notificationParams.SetString(1, $"{logic.TilePower?.MaxCharge ?? 0:n0}");
-
-                                var notification =
-                                    GameContext.NotificationDatabase.CreateNotificationFromCode(
-                                        "nimbusfox.powerapi.notifications.powerInformation", facade.Step,
-                                        notificationParams, true);
-
-                                entity.PlayerEntityLogic?.ShowNotification(notification);
-                            }
-
-                            //if (logic is ChargeableTileStateEntityLogic tileLogic) {
-                            //    var notificationParams = new NotificationParams(2);
-
-                            //    notificationParams.SetString(0, $"{tileLogic.TilePower?.CurrentCharge ?? 0:n0}");
-                            //    notificationParams.SetString(1, $"{tileLogic.TilePower?.MaxCharge ?? 0:n0}");
-
-                            //    var notification =
-                            //        GameContext.NotificationDatabase.CreateNotificationFromCode(
-                            //            "nimbusfox.powerapi.notifications.powerInformation", facade.Step,
-                            //            notificationParams, true);
-
-                            //    entity.PlayerEntityLogic?.ShowNotification(notification);
-                            //}
-                        }
-                    }
-                }
             }
         }
 
@@ -150,7 +112,7 @@ namespace NimbusFox.PowerAPI.Items {
 
             verb = "nimbusfox.powerapi.verb.changeMode";
 
-            return true;
+            return false;
         }
 
         public override bool TryResolveMainInteractVerb(Entity entity, EntityUniverseFacade facade, Vector3I location,
@@ -185,6 +147,10 @@ namespace NimbusFox.PowerAPI.Items {
             base.Restore(configuration, blob);
 
             _mode = (Mode) blob.GetLong("mode", 0);
+
+            if ((int) _mode > 1) {
+                _mode = Mode.PickUp;
+            }
         }
 
         public override string GetItemDescription(LanguageDatabase lang) {
@@ -198,14 +164,11 @@ namespace NimbusFox.PowerAPI.Items {
         }
 
         private string GetVerb() {
-            if (_mode == Mode.PickUp) {
-                return "nimbusfox.powerapi.verb.pickUp";
-            }
-            if (_mode == Mode.Power) {
-                return "nimbusfox.powerapi.verb.powerCheck";
+            if (_mode == Mode.Rotate) {
+                return "nimbusfox.powerapi.verb.rotate";
             }
 
-            return "nimbusfox.powerapi.verb.rotate";
+            return "nimbusfox.powerapi.verb.pickUp";
         }
     }
 }
