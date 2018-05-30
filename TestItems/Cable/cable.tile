@@ -11,9 +11,11 @@
     "chargeable": {
         "maxCharge": 200,
         "transferRate": {
-            "in": 100,
-            "out": 100
-        }
+            "in": 20,
+            "out": 20
+        },
+        "inputFromTiles": true,
+        "outputToTiles": true
     },
     "collision": true,
     "orientationVariants": false,

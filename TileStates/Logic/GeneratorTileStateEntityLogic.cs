@@ -3,37 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NimbusFox.PowerAPI.Classes;
-using NimbusFox.PowerAPI.Interfaces;
+using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Tiles.Builders;
 using NimbusFox.PowerAPI.Tiles.Logic;
-using NimbusFox.PowerAPI.TileStates.Builders;
 using Plukit.Base;
 using Staxel;
-using Staxel.Items;
 using Staxel.Logic;
-using Staxel.Rendering;
 using Staxel.Tiles;
 using Staxel.TileStates;
 
 namespace NimbusFox.PowerAPI.TileStates.Logic {
-    public class ChargeableTileStateEntityLogic : TileStateEntityLogic {
+    public class GeneratorTileStateEntityLogic : TileStateEntityLogic {
 
         private EntityId _logicOwner = EntityId.NullEntityId;
         private bool _despawn;
         public TileConfiguration Configuration;
 
-        public ChargeableTileStateEntityLogic(Entity entity) : base(entity) {
+        public GeneratorTileStateEntityLogic(Entity entity) : base(entity) {
             Entity.Physics.PriorityChunkRadius(0, false);
         }
-        public override void PreUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
-        }
-
-        public override void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
-        }
-
-        public override void PostUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
-        }
+        public override void PreUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) { }
+        public override void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade) { }
+        public override void PostUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) { }
 
         public override void Construct(Blob arguments, EntityUniverseFacade entityUniverseFacade) {
             _despawn = arguments.GetBool("despawn", false);
@@ -53,7 +44,7 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
                         return false;
                     }
 
-                    if (entity.Logic is ChargeableTileEntityLogic logic) {
+                    if (entity.Logic is GeneratorTileEntityLogic logic) {
                         return Location == logic.Location;
                     }
 
@@ -65,23 +56,24 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
                 if (tileEntity != default(Entity)) {
                     _logicOwner = tileEntity.Id;
                 } else {
+                    var components = Configuration.Components.Select<GeneratorComponent>().ToList();
+                    if (components.Any()) {
+                        var component = components.First();
 
-                    _logicOwner = ChargeableTileEntityBuilder.Spawn(Location, blob, entityUniverseFacade).Id;
+                        if (component.Type == "solar") {
+                            _logicOwner = ChargeableTileEntityBuilder.Spawn(Location, blob, entityUniverseFacade, SolarPanelTileEntityBuilder.KindCode).Id;
+                        }
+                    }
                 }
-
             }
         }
+
         public override void Bind() { }
         public override bool Interactable() {
-            return !Configuration.InteractActionTrigger.IsNullOrEmpty();
+            return false;
         }
 
-        public override void Interact(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) {
-            if (!alt.DownClick) {
-                return;
-            }
-            entity.PlayerEntityLogic.NextAction(Configuration.InteractActionTrigger);
-        }
+        public override void Interact(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) { }
         public override bool CanChangeActiveItem() {
             return false;
         }
@@ -94,9 +86,7 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
             return false;
         }
 
-        public override void KeepAlive() {
-            
-        }
+        public override void KeepAlive() { }
 
         public override void BeingLookedAt(Entity entity) {
             KeepAlive();
@@ -130,7 +120,7 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
 
         public override void RestoreFromPersistedData(Blob data, EntityUniverseFacade facade) {
             base.RestoreFromPersistedData(data, facade);
-            _logicOwner = (EntityId) data.GetLong("logicOwner", 0L);
+            _logicOwner = (EntityId)data.GetLong("logicOwner", 0L);
             _despawn = data.GetBool("despawn", false);
         }
     }

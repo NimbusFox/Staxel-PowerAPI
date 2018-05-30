@@ -8,12 +8,12 @@ namespace NimbusFox.PowerAPI.Components {
     public class ChargeableComponent {
         public long MaxCharge { get; }
         public TransferRate TransferRate { get; }
-        public Dictionary<int, string> ChargeModels { get; }
-        public string DescriptionCode { get; }
+        public virtual Dictionary<int, string> ChargeModels { get; }
+        public virtual string DescriptionCode { get; }
         public virtual bool OutputToTiles { get; }
         public virtual bool InputFromTiles { get; }
-        public string PowerVerb { get; }
-        public IReadOnlyList<string> CompatiblePower { get; }
+        public virtual string PowerVerb { get; }
+        public virtual IReadOnlyList<string> CompatiblePower { get; }
         private Blob _blob;
 
         public ChargeableComponent(Blob config, long maxCharge = 300000, long transferIn = 128, long transferOut = 128) {

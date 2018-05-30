@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components;
+using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items.Builders;
+using NimbusFox.PowerAPI.Tiles.Logic;
 using NimbusFox.PowerAPI.TileStates.Logic;
 using Plukit.Base;
 using Staxel;
@@ -65,23 +67,24 @@ namespace NimbusFox.PowerAPI.Items {
                 if (entity.PlayerEntityLogic.LookingAtTile(out var target, out _)) {
                     if (facade.ReadTile(target, TileAccessFlags.SynchronousWait, out var tile)) {
                         if (tile.Configuration.Components.Contains<WrenchableComponent>()) {
-                            var logic = facade.FetchTileStateEntityLogic(target,
-                                TileAccessFlags.SynchronousWait).GetPowerForTile(facade);
 
-                            if (logic != null) {
-                                facade.RemoveEntity(logic.Entity.Id);
+                            if (facade.TryFetchTileStateEntityLogic(target, TileAccessFlags.SynchronousWait,
+                                out var logic)) {
+                                if (logic is ChargeableTileStateEntityLogic chargeable) {
+                                    if (facade.TryGetEntity(chargeable.GetOwner(), out var owner)) {
+                                        if (owner.Logic is ITileWithPower tileWithPower) {
+                                            tileWithPower.ActiveNameTag = false;
+                                        }
+                                        facade.RemoveEntity(chargeable.GetOwner());
+                                    }
+
+                                    facade.RemoveEntity(chargeable.Entity.Id);
+                                }
                             }
 
                             var destructor = DestructionEntityBuilder.Spawn(entity, target, facade, "");
                             destructor.AttemptPickup();
                             destructor.EnqueueDeferredDestructionQueue(facade.Step, target, tile);
-
-                            //if (facade.TryFetchTileStateEntityLogic(target, TileAccessFlags.SynchronousWait,
-                            //    out var logic)) {
-                            //    if (logic is ChargeableTileStateEntityLogic chargeable) {
-                            //        facade.RemoveEntity(chargeable.Entity.Id);
-                            //    }
-                            //}
                         }
                     }
                 }

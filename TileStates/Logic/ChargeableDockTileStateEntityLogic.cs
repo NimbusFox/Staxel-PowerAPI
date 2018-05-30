@@ -14,6 +14,7 @@ using Staxel.Core;
 using Staxel.Docks;
 using Staxel.Items;
 using Staxel.Logic;
+using Staxel.Rendering;
 using Staxel.Tiles;
 using Staxel.TileStates.Docks;
 
@@ -79,6 +80,7 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
         }
 
         public void AddIgnore(Vector3I location) { }
+        public bool ActiveNameTag { get; set; }
 
         public IReadOnlyList<DockSite> DockSites => _dockSites;
 

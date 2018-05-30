@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Cycle.cs" />
-    <Compile Include="Classes\DummyTileStateEntityLogic.cs" />
     <Compile Include="Classes\Extensions.cs" />
     <Compile Include="Classes\ChargeableItemIcons.cs" />
     <Compile Include="Classes\Power.cs" />
@@ -61,6 +60,7 @@
     <Compile Include="Commands\Debug\RemovePowerCommand.cs" />
     <Compile Include="Commands\Debug\SetPowerCommand.cs" />
     <Compile Include="Commands\EnableDebugCommand.cs" />
+    <Compile Include="Components\GeneratorComponent.cs" />
     <Compile Include="Components\Items\BatteryItemComponent.cs" />
     <Compile Include="Components\Items\Builders\BatteryItemComponentBuilder.cs" />
     <Compile Include="Components\Items\Builders\CapacitorItemComponentBuilder.cs" />
@@ -68,9 +68,9 @@
     <Compile Include="Components\ChargeableComponent.cs" />
     <Compile Include="Components\Items\CapacitorItemComponent.cs" />
     <Compile Include="Components\Tiles\Builders\ChargeableTileComponentBuilder.cs" />
+    <Compile Include="Components\Tiles\Builders\GeneratorTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\WrenchableTileComponentBuilder.cs" />
     <Compile Include="Components\WrenchableComponent.cs" />
-    <Compile Include="Database\PowerDatabase.cs" />
     <Compile Include="Hooks\BatteryInventoryHook.cs" />
     <Compile Include="Hooks\CycleHook.cs" />
     <Compile Include="Interfaces\ICycleRun.cs" />
@@ -88,7 +88,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TileStates\Builders\ChargeableDockTileStateBuilder.cs" />
     <Compile Include="TileStates\Builders\ChargeableDockTileStateEntityBuilder.cs" />
+    <Compile Include="TileStates\Builders\GeneratorTileStateBuilder.cs" />
+    <Compile Include="TileStates\Builders\GeneratorTileStateEntityBuilder.cs" />
     <Compile Include="TileStates\Logic\ChargeableTileStateEntityLogic.cs" />
+    <Compile Include="TileStates\Logic\GeneratorTileStateEntityLogic.cs" />
     <Compile Include="Tiles\Builders\ChargeableTileEntityBuilder.cs" />
     <Compile Include="TileStates\Builders\ChargeableTileStateBuilder.cs" />
     <Compile Include="TileStates\Builders\ChargeableTileStateEntityBuilder.cs" />
@@ -96,12 +99,16 @@
     <Compile Include="TileStates\DockSites\CapacitorDockSite.cs" />
     <Compile Include="TileStates\DockSites\ChargeableDockSite.cs" />
     <Compile Include="TileStates\Logic\ChargeableDockTileStateEntityLogic.cs" />
+    <Compile Include="Tiles\Builders\GeneratorTileEntityBuilder.cs" />
+    <Compile Include="Tiles\Builders\SolarPanelTileEntityBuilder.cs" />
     <Compile Include="Tiles\Logic\ChargeableTileEntityLogic.cs" />
+    <Compile Include="Tiles\Logic\GeneratorTileEntityLogic.cs" />
     <Compile Include="Tiles\Logic\SolarPanelTileEntityLogic.cs" />
+    <Compile Include="Tiles\Painters\ChargeableTileEntityPainter.cs" />
+    <Compile Include="Tiles\Painters\SolarPanelTileEntityPainter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TileStates\Painters\" />
-    <Folder Include="Tiles\Painters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NimbusFox.PowerAPI.mod">

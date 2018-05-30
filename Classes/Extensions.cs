@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Reflection;
 using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items;
 using NimbusFox.PowerAPI.TileStates.Logic;
+using Plukit.Base;
 using Staxel;
 using Staxel.Items;
 using Staxel.Logic;
@@ -116,6 +118,42 @@ namespace NimbusFox.PowerAPI.Classes {
             }
 
             return null;
+        }
+
+        public static bool TryGetLightPower(this EntityUniverseFacade facade, Vector3I location, out int efficiency, out float phase, out int reduction) {
+            reduction = 0;
+            phase = 0;
+            efficiency = 0;
+
+            var tileAccess = ClientContext.NameTagRenderer != null ? TileAccessFlags.None
+                : TileAccessFlags.SynchronousWait;
+
+            if (facade.ReadLighting(new Vector3I(location.X, location.Y + 1, location.Z),
+                tileAccess, out var light, out _)) {
+                var color = Color.FromArgb(light.Lighting.R, light.Lighting.G, light.Lighting.B);
+
+                efficiency = (int) Math.Floor((double) color.GetBrightness() * 100);
+
+                reduction = 100 - efficiency;
+
+                phase = facade.DayNightCycle().Phase;
+
+                if (phase < 0.4 || phase > 0.6) {
+                    var test = (float) (0.5 - phase);
+                    test = (float) (test / 0.5 * 100);
+                    test = Math.Abs(test);
+                    reduction += (int) Math.Floor(test);
+                    efficiency = efficiency - reduction;
+                }
+
+                if (facade.DayNightCycle().IsNight || phase <= 0.1 || phase >= 0.9) {
+                    efficiency = 0;
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using NimbusFox.PowerAPI.Classes;
 using Plukit.Base;
+using Staxel.Rendering;
 
 namespace NimbusFox.PowerAPI.Interfaces {
     public interface ITileWithPower : ICycleRun {
@@ -11,5 +12,6 @@ namespace NimbusFox.PowerAPI.Interfaces {
         void AddPower(long power);
         void RemovePower(long power);
         void AddIgnore(Vector3I location);
+        bool ActiveNameTag { get; set; }
     }
 }

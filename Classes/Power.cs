@@ -196,5 +196,9 @@ namespace NimbusFox.PowerAPI.Classes {
 
             return CurrentCharge;
         }
+
+        internal void SetMaxCharge(long charge) {
+            MaxCharge = charge;
+        }
     }
 }

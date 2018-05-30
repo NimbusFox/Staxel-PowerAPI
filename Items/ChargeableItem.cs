@@ -87,7 +87,7 @@ namespace NimbusFox.PowerAPI.Items {
         public override string GetItemDescription(LanguageDatabase lang) {
             var text = DescriptionCode != null ? lang.GetTranslationString(DescriptionCode) : base.GetItemDescription(lang);
 
-            return string.Format(text, ItemPower.CurrentCharge, ItemPower.MaxCharge, ItemPower.TransferRate.In, ItemPower.TransferRate.Out,
+            return string.Format(text, ItemPower.CurrentCharge.ToString("N0"), ItemPower.MaxCharge.ToString("N0"), ItemPower.TransferRate.In.ToString("N0"), ItemPower.TransferRate.Out.ToString("N0"),
                 lang.GetTranslationString("nimbusfox.powerapi.perCycle"),
                 lang.GetTranslationString("nimbusfox.powerapi.verb.power"));
         }

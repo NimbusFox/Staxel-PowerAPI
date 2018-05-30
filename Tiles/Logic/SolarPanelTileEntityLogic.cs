@@ -3,40 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NimbusFox.PowerAPI.Classes;
 using Plukit.Base;
-using Staxel.Items;
 using Staxel.Logic;
 
 namespace NimbusFox.PowerAPI.Tiles.Logic {
-    public class SolarPanelTileEntityLogic : ChargeableTileEntityLogic {
+    public class SolarPanelTileEntityLogic : GeneratorTileEntityLogic {
         public SolarPanelTileEntityLogic(Entity entity) : base(entity) { }
 
-        private bool _generatePower = false;
-        private bool _timePaused = false;
-
         public override void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
-            base.Update(timestep, entityUniverseFacade);
-
-            if (entityUniverseFacade.ReadLighting(new Vector3I(Location.X, Location.Y + 1, Location.Z), TileAccessFlags.SynchronousWait, out var tileLight,
-                out var tileEmissive)) {
-                _timePaused = entityUniverseFacade.DayNightCycle().GamePaused();
-
-                if (entityUniverseFacade.DayNightCycle().IsNight) {
-                    _generatePower = false;
-                    goto runCycle;
-                }
-            }
-            runCycle:
-            Cycle.RunCycle(RunCycle);
-        }
-
-        public override void RunCycle() {
-            if (!_generatePower) {
-                goto runBaseCycle;
+            if (!entityUniverseFacade.TryGetLightPower(Location, out var efficiency, out _, out _)) {
+                base.Update(timestep, entityUniverseFacade, 0);
+                return;
             }
 
-            runBaseCycle:
-            base.RunCycle();
+            base.Update(timestep, entityUniverseFacade, efficiency);
         }
     }
 }

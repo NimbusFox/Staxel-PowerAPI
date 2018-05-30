@@ -9,6 +9,7 @@ using Staxel;
 using Staxel.Core;
 using Staxel.Items;
 using Staxel.Logic;
+using Staxel.Rendering;
 
 namespace NimbusFox.PowerAPI.Tiles.Logic {
     public class ChargeableTileEntityLogic : EntityLogic, ITileWithPower {
@@ -35,6 +36,10 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
             }
         }
 
+        public string Tile { get; private set; }
+
+        public bool ActiveNameTag { get; set; } = true;
+
         private readonly List<Vector3I> _ignoreInputs = new List<Vector3I>();
 
         public Power TilePower { get; private set; }
@@ -49,8 +54,6 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
 
         private EntityUniverseFacade _universe;
 
-        private long _charge;
-
         public ChargeableTileEntityLogic(Entity entity) {
             Entity = entity;
             
@@ -59,22 +62,25 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
         public override void PreUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
         }
 
-        public override void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
+        public virtual void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade, bool inherited = false) {
             if (TilePower == null) {
                 return;
             }
             if (entityUniverseFacade.ReadTile(Location, TileAccessFlags.SynchronousWait, out var tile)) {
-                if (tile.Configuration.Components.Contains<ChargeableComponent>()) {
-                    TilePower.GetPowerFromComponent(tile.Configuration.Components.Get<ChargeableComponent>());
+                if (tile.Configuration.Components.Select<ChargeableComponent>().Any()) {
+                    TilePower.GetPowerFromComponent(tile.Configuration.Components.Select<ChargeableComponent>().First());
+                } else {
+                    entityUniverseFacade.RemoveEntity(Entity.Id);
                 }
             }
 
-            if (_charge != 0) {
-                TilePower.AddPower(_charge);
-                _charge = 0;
+            if (!inherited) {
+                Cycle.RunCycle(RunCycle);
             }
+        }
 
-            Cycle.RunCycle(RunCycle);
+        public override void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
+            Update(timestep, entityUniverseFacade);
         }
 
         public override void PostUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
@@ -83,12 +89,15 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
         public override void Construct(Blob arguments, EntityUniverseFacade entityUniverseFacade) {
             Location = arguments.FetchBlob("location").GetVector3I();
             _universe = entityUniverseFacade;
+
             if (TilePower == null) {
                 TilePower = new Power(ModelUpdate);
                 if (entityUniverseFacade.ReadTile(Location, TileAccessFlags.SynchronousWait, out var tile)) {
                     if (tile.Configuration.Components.Contains<ChargeableComponent>()) {
                         TilePower.GetPowerFromComponent(tile.Configuration.Components.Get<ChargeableComponent>());
                     }
+
+                    Tile = tile.Configuration.Code;
                 }
             }
 
@@ -122,7 +131,11 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
         public override void Store() {
             if (TilePower != null) {
                 Entity.Blob.SetLong("currentCharge", TilePower.CurrentCharge);
+                Entity.Blob.SetLong("maxCharge", TilePower.MaxCharge);
             }
+            Entity.Blob.SetBool("activeNameTag", ActiveNameTag);
+            Entity.Blob.FetchBlob("location").SetVector3I(Location);
+            Entity.Blob.SetString("tile", Tile);
         }
 
         public override void Restore() {
@@ -142,7 +155,23 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
             }
 
             if (Entity.Blob.Contains("currentCharge")) {
-                _charge = Entity.Blob.GetLong("currentCharge");
+                TilePower.SetPower(Entity.Blob.GetLong("currentCharge"));
+            }
+
+            if (Entity.Blob.Contains("activeNameTag")) {
+                ActiveNameTag = Entity.Blob.GetBool("activeNameTag");
+            }
+
+            if (Entity.Blob.Contains("location")) {
+                Location = Entity.Blob.FetchBlob("location").GetVector3I();
+            }
+
+            if (Entity.Blob.Contains("tile")) {
+                Tile = Entity.Blob.GetString("tile");
+            }
+
+            if (Entity.Blob.Contains("maxCharge")) {
+                TilePower.SetMaxCharge(Entity.Blob.GetLong("maxCharge"));
             }
         }
 
