@@ -20,6 +20,8 @@ namespace NimbusFox.PowerAPI.Tiles.Painters {
 
         private NameTag _efficienyTag;
 
+        private NameTag _chargeTag;
+
         public override void ClientUpdate(Timestep timestep, Entity entity, AvatarController avatarController, EntityUniverseFacade facade) {
             var fail = true;
             if (entity.Logic is SolarPanelTileEntityLogic logic) {
@@ -34,10 +36,15 @@ namespace NimbusFox.PowerAPI.Tiles.Painters {
                                 _efficienyTag = ClientContext.NameTagRenderer.RegisterNameTag(entity.Id);
                             }
 
+                            if (_chargeTag == null) {
+                                _chargeTag = ClientContext.NameTagRenderer.RegisterNameTag(entity.Id);
+                            }
+
                             if (facade.TryGetLightPower(logic.Location, out var efficiency, out _, out _)) {
                                 var pos = Constants.NameTagLowerOffset;
-                                NameTag.Setup(entity.Physics.Position, pos, logic.TilePower.CurrentCharge.ToString("N0") + " / " + logic.TilePower.MaxCharge.ToString("N0"), false, false, false);
-                                _efficienyTag.Setup(entity.Physics.Position, new Vector3D(pos.X, pos.Y - 0.2, pos.Z), efficiency + "%", false, false, false);
+                                NameTag.Setup(entity.Physics.Position, new Vector3D(pos.X, pos.Y + 0.2, pos.Z), logic.TilePower.CurrentCharge.ToString("N0") + " / " + logic.TilePower.MaxCharge.ToString("N0"), false, false, false);
+                                _efficienyTag.Setup(entity.Physics.Position, new Vector3D(pos.X, pos.Y, pos.Z), efficiency + "%", false, false, false);
+                                _chargeTag.Setup(entity.Physics.Position, new Vector3D(pos.X, pos.Y - 0.2, pos.Z), logic.Generated + ClientContext.LanguageDatabase.GetTranslationString("nimbusfox.powerapi.perCycle"), false, false, false);
                                 fail = false;
                             }
                         }
@@ -53,6 +60,11 @@ namespace NimbusFox.PowerAPI.Tiles.Painters {
                     if (_efficienyTag != null) {
                         ClientContext.NameTagRenderer.Unregister(_efficienyTag);
                         _efficienyTag = null;
+                    }
+
+                    if (_chargeTag != null) {
+                        ClientContext.NameTagRenderer.Unregister(_chargeTag);
+                        _chargeTag = null;
                     }
                 }
             }

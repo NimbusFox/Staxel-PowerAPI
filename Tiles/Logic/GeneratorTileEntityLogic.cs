@@ -17,6 +17,7 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
         private bool _generatePower = false;
         private bool _timePaused;
         private long _powerToGenerate;
+        public long Generated { get; private set; }
 
         public virtual void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade, int efficiency = 100, bool inherited = false) {
             Update(timestep, entityUniverseFacade, true);
@@ -47,6 +48,7 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
             base.Store();
 
             Entity.Blob.SetLong("powerToGenerate", _powerToGenerate);
+            Entity.Blob.SetLong("generated", Generated);
         }
 
         public override void Restore() {
@@ -54,6 +56,10 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
 
             if (Entity.Blob.Contains("powerToGenerate")) {
                 _powerToGenerate = Entity.Blob.GetLong("powerToGenerate");
+            }
+
+            if (Entity.Blob.Contains("generated")) {
+                Generated = Entity.Blob.GetLong("generated");
             }
         }
 
@@ -70,12 +76,13 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
                 var toGenerate = _powerToGenerate * efficency;
 
                 if (toGenerate == 0) {
+                    Generated = 0;
                     goto runBaseCycle;
                 }
 
                 toGenerate = (long) Math.Floor((double) toGenerate / 100);
 
-                TilePower.AddPower(toGenerate);
+                Generated = TilePower.AddPower(toGenerate);
 
                 runBaseCycle:
                 base.RunCycle();
