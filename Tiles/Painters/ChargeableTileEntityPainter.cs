@@ -41,6 +41,17 @@ namespace NimbusFox.PowerAPI.Tiles.Painters {
                     }
                 }
 
+                if (entity.Logic is InnerCableTileEntityLogic innerLogic) {
+                    if (CycleHook.Tags.Contains(innerLogic.Location)) {
+                        if (NameTag == null) {
+                            NameTag = ClientContext.NameTagRenderer.RegisterNameTag(entity.Id);
+                        }
+
+                        NameTag.Setup(entity.Physics.Position, Constants.NameTagLowerOffset, innerLogic.TilePower.CurrentCharge.ToString("N0") + " / " + innerLogic.TilePower.MaxCharge.ToString("N0"), false, false, false);
+                        fail = false;
+                    }
+                }
+
                 if (fail) {
                     if (NameTag != null) {
                         ClientContext.NameTagRenderer.Unregister(NameTag);

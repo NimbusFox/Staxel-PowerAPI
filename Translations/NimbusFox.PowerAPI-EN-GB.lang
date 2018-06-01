@@ -3,37 +3,48 @@ language=English
 
 nimbusfox.powerapi.perCycle=/cycle
 nimbusfox.powerapi.verb.power=Watts
-nimbusfox.powerapi.verb.changeMode=Mode Change
+nimbusfox.powerapi.verb.changeMode=Mode
 nimbusfox.powerapi.verb.rotate=Rotate
 nimbusfox.powerapi.verb.pickUp=Pick Up
 nimbusfox.powerapi.verb.powerCheck=Power
 nimbusfox.powerapi.verb.lightCheck=Light
+nimbusfox.powerapi.verb.insert=Insert
+nimbusfox.powerapi.verb.extract=Extract
+nimbusfox.powerapi.verb.changeCable=Cable
+nimbusfox.powerapi.verb.none=None
 
 nimbusfox.powerapi.notifications.powerInformation.text=Watts: {0}/{1}
 nimbusfox.powerapi.notifications.lightInformation.text=Light:{0} Phase:{1} Reduction:{2}
+nimbusfox.powerapi.notifications.noCable.text=You do not have: {0}
+nimbusfox.powerapi.notifications.noCableSelected.text=No cable is selected
 
 staxel.category.technology=Technology
 staxel.category.tech=Tech
 staxel.category.wrench=Wrench
 staxel.category.battery=Battery
 staxel.category.chargeable=Chargeable
+staxel.category.multimeter=Multimeter
+staxel.category.cableDrill=Cable Drill
 
 nimbusfox.powerapi.needWrench=Wrench
 
+nimbusfox.powerapi.item.wrench.name=Wrench
 nimbusfox.powerapi.item.wrench.description=An handy item to adjust and pickup machinery.
 
-nimbusfox.powerapi.debug.battery.0=Battery (0%)
-nimbusfox.powerapi.debug.battery.25=Battery (25%)
-nimbusfox.powerapi.debug.battery.50=Battery (50%)
-nimbusfox.powerapi.debug.battery.75=Battery (75%)
-nimbusfox.powerapi.debug.battery.100=Battery (100%)
+nimbusfox.powerapi.debug.battery.0.name=Battery (0%)
+nimbusfox.powerapi.debug.battery.25.name=Battery (25%)
+nimbusfox.powerapi.debug.battery.50.name=Battery (50%)
+nimbusfox.powerapi.debug.battery.75.name=Battery (75%)
+nimbusfox.powerapi.debug.battery.100.name=Battery (100%)
 nimbusfox.powerapi.debugItem.description={5}: {0}/{1} Transfer in: {2}{4} Transfer out: {3}{4}
 
-nimbusfox.powerapi.tile.testBench.0=Test Bench
-nimbusfox.powerapi.tile.testBench.25=Test Bench
-nimbusfox.powerapi.tile.testBench.50=Test Bench
-nimbusfox.powerapi.tile.testBench.75=Test Bench
-nimbusfox.powerapi.tile.testBench.100=Test Bench
+nimbusfox.powerapi.item.cableDrill.description=Charge: {0}/{1} {5} Allows you to insert and extract cables from tiles. Uses: {6}
+
+nimbusfox.powerapi.tile.testBench.0.name=Test Bench
+nimbusfox.powerapi.tile.testBench.25.name=Test Bench
+nimbusfox.powerapi.tile.testBench.50.name=Test Bench
+nimbusfox.powerapi.tile.testBench.75.name=Test Bench
+nimbusfox.powerapi.tile.testBench.100.name=Test Bench
 
 nimbusfox.powerapi.command.debug.description=^c:F2E200;powerdebug ^c:FFFFFF;Enables the PowerAPI's debug commands
 nimbusfox.powerapi.command.debug.confirmation=If you enable debug commands then your world will no longer be able to get achievements. If you are sure then type "/powerdebug confirm"

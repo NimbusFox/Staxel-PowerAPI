@@ -18,7 +18,6 @@
         "z": -1.56
     },
     "interactVerb": "", 
-    "isDockable": false,
     "kind": "nimbusfox.powerapi.item.wrench",
     "pricing": {
         "buyable": true,

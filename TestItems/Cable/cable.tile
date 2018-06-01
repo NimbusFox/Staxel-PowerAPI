@@ -23,5 +23,6 @@
     "searchable": true,
     "placementDirection": [
         "yn"
-    ]
+    ],
+    "cable": {} 
 }

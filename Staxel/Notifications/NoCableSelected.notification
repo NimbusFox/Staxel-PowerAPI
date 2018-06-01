@@ -1,0 +1,6 @@
+﻿{
+    "__inherits": "staxel/notifications/GeneralNotification.config",
+    "code": "nimbusfox.powerapi.notifications.noCableSelected",
+    "translationCode": "nimbusfox.powerapi.notifications.noCableSelected.text",
+    "icon": "staxel/notifications/icons/NoticeIcon.png"
+}

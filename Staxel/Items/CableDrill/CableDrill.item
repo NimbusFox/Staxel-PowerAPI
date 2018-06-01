@@ -1,0 +1,42 @@
+﻿{
+    "categories": [
+        "technology",
+        "tech",
+        "cableDrill"
+    ],
+    "code": "nimbusfox.powerapi.item.cableDrill",
+    "icon": "mods/Power API/Staxel/Items/CableDrill/GripDrill_Dewalt.qb",
+    "inHand": "mods/Power API/Staxel/Items/CableDrill/GripDrill_Dewalt.qb",
+    "inHandOffset": {
+        "x": 0.0,
+        "y": -0.5,
+        "z": 0.0
+    },
+    "inHandRotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "interactVerb": "",
+    "kind": "nimbusfox.powerapi.item.cableDrill",
+    "pricing": {
+        "buyable": true,
+        "sellPrice": 100,
+        "value": 400
+    },
+    "searchable": true,
+    "usageOffset": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "chargeable": {
+        "chargeInventory": false,
+        "descriptionCode": "nimbusfox.powerapi.item.cableDrill.description",
+        "transferRate": {
+            "in": 100,
+            "out": 10
+        },
+        "maxCharge": 10000
+    }
+}

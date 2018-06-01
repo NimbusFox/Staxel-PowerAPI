@@ -36,7 +36,7 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
             }
         }
 
-        public string Tile { get; private set; }
+        public string Tile { get; internal set; }
 
         public bool ActiveNameTag { get; set; } = true;
 
@@ -52,11 +52,11 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
         public Entity Entity { get; }
         public Vector3I Location { get; private set; }
 
-        private EntityUniverseFacade _universe;
+        internal EntityUniverseFacade Universe { get; set; }
 
         public ChargeableTileEntityLogic(Entity entity) {
             Entity = entity;
-            
+
         }
 
         public override void PreUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
@@ -71,8 +71,11 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
                     TilePower.GetPowerFromComponent(tile.Configuration.Components.Select<ChargeableComponent>().First());
                 } else {
                     entityUniverseFacade.RemoveEntity(Entity.Id);
+                    return;
                 }
             }
+
+            Universe = entityUniverseFacade;
 
             if (!inherited) {
                 Cycle.RunCycle(RunCycle);
@@ -88,7 +91,7 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
 
         public override void Construct(Blob arguments, EntityUniverseFacade entityUniverseFacade) {
             Location = arguments.FetchBlob("location").GetVector3I();
-            _universe = entityUniverseFacade;
+            Universe = entityUniverseFacade;
 
             if (TilePower == null) {
                 TilePower = new Power(ModelUpdate);
@@ -206,12 +209,22 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
                 if (_ignoreInputs.Contains(location)) {
                     continue;
                 }
-                if (_universe.ReadTile(location, TileAccessFlags.SynchronousWait, out var tile)) {
-                    if (tile.Configuration.Code == "staxel.tile.Sky" || !tile.Configuration.Components.Select<ChargeableComponent>().Any()) {
+                if (Universe.ReadTile(location, TileAccessFlags.SynchronousWait, out var tile)) {
+                    if (tile.Configuration.Code == "staxel.tile.Sky") {
                         continue;
                     }
 
-                    var logic = _universe.FetchTileStateEntityLogic(location, TileAccessFlags.SynchronousWait).GetPowerForTile(_universe);
+                    if (Universe.AnyInnerCableEntitiesInTile(location, out var entities)) {
+                        foreach (var entity in entities) {
+                            if (entity.Logic is ITileWithPower powerLogic) {
+                                output.Add(powerLogic);
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    var logic = Universe.FetchTileStateEntityLogic(location, TileAccessFlags.SynchronousWait).GetPowerForTile(Universe);
                     if (logic != null) {
                         if (ignoreFull) {
                             if (logic.GetPower() != logic.TilePower?.MaxCharge && logic.InputFromTiles) {

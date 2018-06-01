@@ -21,10 +21,10 @@ namespace NimbusFox.PowerAPI.Items {
 
         public bool RunOnUpdateSecond { get; internal set; }
 
-        internal Power ItemPower;
+        public Power ItemPower { get; private set; }
 
         private Dictionary<int, ItemConfiguration> _chargeModels;
-        private string DescriptionCode { get; set; }
+        protected string DescriptionCode { get; private set; }
 
         public ChargeableItem(ChargeableItemBuilder builder, ItemConfiguration config) : base(builder.Kind()) {
             _builder = builder;
@@ -147,6 +147,10 @@ namespace NimbusFox.PowerAPI.Items {
         public override bool Same(Item item) {
             if (item is ChargeableItem chargeable) {
                 if (chargeable.ItemPower.CurrentCharge != ItemPower.CurrentCharge) {
+                    return false;
+                }
+
+                if (item.Configuration != Configuration) {
                     return false;
                 }
             }

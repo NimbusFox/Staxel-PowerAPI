@@ -63,13 +63,16 @@
     <Compile Include="Components\GeneratorComponent.cs" />
     <Compile Include="Components\Items\BatteryItemComponent.cs" />
     <Compile Include="Components\Items\Builders\BatteryItemComponentBuilder.cs" />
+    <Compile Include="Components\Items\Builders\CableItemComponentBuilder.cs" />
     <Compile Include="Components\Items\Builders\CapacitorItemComponentBuilder.cs" />
     <Compile Include="Components\Items\Builders\ChargeableItemComponentBuilder.cs" />
     <Compile Include="Components\ChargeableComponent.cs" />
     <Compile Include="Components\Items\CapacitorItemComponent.cs" />
+    <Compile Include="Components\Tiles\Builders\CableTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\ChargeableTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\GeneratorTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\WrenchableTileComponentBuilder.cs" />
+    <Compile Include="Components\CableComponent.cs" />
     <Compile Include="Components\WrenchableComponent.cs" />
     <Compile Include="Hooks\BatteryInventoryHook.cs" />
     <Compile Include="Hooks\CycleHook.cs" />
@@ -77,10 +80,12 @@
     <Compile Include="Interfaces\ITileWithPower.cs" />
     <Compile Include="Items\BatteryItem.cs" />
     <Compile Include="Items\Builders\BatteryItemBuilder.cs" />
+    <Compile Include="Items\Builders\CableDrillItemBuilder.cs" />
     <Compile Include="Items\Builders\CapacitorItemBuilder.cs" />
     <Compile Include="Items\Builders\ChargeableItemBuilder.cs" />
     <Compile Include="Items\Builders\MultiMeterItemBuilder.cs" />
     <Compile Include="Items\Builders\WrenchItemBuilder.cs" />
+    <Compile Include="Items\CableDrillItem.cs" />
     <Compile Include="Items\CapacitorItem.cs" />
     <Compile Include="Items\ChargeableItem.cs" />
     <Compile Include="Items\MultiMeterItem.cs" />
@@ -100,9 +105,11 @@
     <Compile Include="TileStates\DockSites\ChargeableDockSite.cs" />
     <Compile Include="TileStates\Logic\ChargeableDockTileStateEntityLogic.cs" />
     <Compile Include="Tiles\Builders\GeneratorTileEntityBuilder.cs" />
+    <Compile Include="Tiles\Builders\InnerCableTileEntityBuilder.cs" />
     <Compile Include="Tiles\Builders\SolarPanelTileEntityBuilder.cs" />
     <Compile Include="Tiles\Logic\ChargeableTileEntityLogic.cs" />
     <Compile Include="Tiles\Logic\GeneratorTileEntityLogic.cs" />
+    <Compile Include="Tiles\Logic\InnerCableTileEntityLogic.cs" />
     <Compile Include="Tiles\Logic\SolarPanelTileEntityLogic.cs" />
     <Compile Include="Tiles\Painters\ChargeableTileEntityPainter.cs" />
     <Compile Include="Tiles\Painters\SolarPanelTileEntityPainter.cs" />
@@ -114,6 +121,12 @@
     <Content Include="NimbusFox.PowerAPI.mod">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Staxel\Items\CableDrill\CableDrill.item">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Staxel\Items\CableDrill\GripDrill_Dewalt.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Staxel\Items\Multimeter\multimeter.qb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -127,6 +140,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Staxel\Notifications\LightInfo.notification">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Staxel\Notifications\NoCableSelected.notification">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Staxel\Notifications\NoCable.notification">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Staxel\Notifications\PowerInfo.notification">

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Reflection;
 using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items;
+using NimbusFox.PowerAPI.Tiles.Logic;
 using NimbusFox.PowerAPI.TileStates.Logic;
 using Plukit.Base;
 using Staxel;
@@ -154,6 +155,25 @@ namespace NimbusFox.PowerAPI.Classes {
             }
 
             return false;
+        }
+
+        public static bool AnyInnerCableEntitiesInTile(this EntityUniverseFacade facade, Vector3I location, out Lyst<Entity> entities) {
+            var output = false;
+
+            var outputEntities = new Lyst<Entity>();
+
+            facade.ForAllEntitiesInRange(location.ToTileCenterVector3D(), 1F, entity => {
+                if (entity.Logic is InnerCableTileEntityLogic logic) {
+                    if (logic.Location == location) {
+                        output = true;
+                        outputEntities.Add(entity);
+                    }
+                }
+            });
+
+            entities = outputEntities;
+
+            return output;
         }
     }
 }
