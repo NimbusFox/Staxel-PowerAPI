@@ -11,7 +11,7 @@ using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Rendering;
 
-namespace NimbusFox.PowerAPI.Tiles.Logic {
+namespace NimbusFox.PowerAPI.TileEntities.Logic {
     public class ChargeableTileEntityLogic : EntityLogic, ITileWithPower {
 
         public void SetPower(long power) {
@@ -44,9 +44,9 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
 
         public Power TilePower { get; private set; }
 
-        public bool OutputToTiles => TilePower.OutputToTiles;
+        public virtual bool OutputToTiles => TilePower.OutputToTiles;
 
-        public bool InputFromTiles => TilePower.InputFromTiles;
+        public virtual bool InputFromTiles => TilePower.InputFromTiles;
 
         public Cycle Cycle { get; } = new Cycle();
         public Entity Entity { get; }

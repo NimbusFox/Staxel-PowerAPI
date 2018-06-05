@@ -6,7 +6,7 @@ using System.Reflection;
 using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileEntities.Logic;
 using Plukit.Base;
 using Staxel;
 using Staxel.Client;
@@ -36,8 +36,6 @@ namespace NimbusFox.PowerAPI.Hooks {
         public void GameContextReloadAfter() {
 
         }
-
-        public static readonly List<Vector3I> Tags = new List<Vector3I>();
 
         private static readonly List<Vector3I> Cycles = new List<Vector3I>();
 
@@ -101,37 +99,6 @@ namespace NimbusFox.PowerAPI.Hooks {
                     //    }
                     //}
                 }
-            } else {
-                var entities = new Lyst<Entity>();
-
-                universe.GetPlayers(entities);
-
-                Entity entity = null;
-
-                foreach (var e in entities) {
-                    if (ClientContext.PlayerFacade.IsLocalPlayer(e)) {
-                        entity = e;
-                    }
-                }
-
-                if (entity == null) {
-                    return;
-                }
-
-                var tags = new List<Vector3I>();
-
-                if (entity.Inventory.ActiveItem().Item is MultiMeterItem) {
-                    universe.ForAllEntitiesInRange(entity.FeetLocation(), 5, tile => {
-                        if (tile.Logic is ChargeableTileEntityLogic logic) {
-                            if (!tags.Contains(logic.Location)) {
-                                tags.Add(logic.Location);
-                            }
-                        }
-                    });
-                }
-
-                Tags.Clear();
-                Tags.AddRange(tags);
             }
         }
         public void UniverseUpdateAfter() { }

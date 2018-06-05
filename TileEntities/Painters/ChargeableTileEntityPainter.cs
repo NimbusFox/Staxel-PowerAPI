@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Hooks;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileEntities.Logic;
 using Plukit.Base;
 using Staxel;
 using Staxel.Client;
@@ -15,22 +15,35 @@ using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Rendering;
 
-namespace NimbusFox.PowerAPI.Tiles.Painters {
+namespace NimbusFox.PowerAPI.TileEntities.Painters {
     public class ChargeableTileEntityPainter : EntityPainter {
 
         internal NameTag NameTag;
 
-        protected override void Dispose(bool disposing) { }
+        internal EntityUniverseFacade Universe;
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                if (NameTag != null) {
+                    ClientContext.NameTagRenderer.Unregister(NameTag);
+                    NameTag = null;
+                }
+            }
+        }
 
         public override void RenderUpdate(Timestep timestep, Entity entity, AvatarController avatarController, EntityUniverseFacade facade,
             int updateSteps) { }
 
         public override void ClientUpdate(Timestep timestep, Entity entity, AvatarController avatarController, EntityUniverseFacade facade) {
+            Universe = facade;
+            if (Universe == null) {
+                return;
+            }
             var fail = true;
             if (entity.Logic is ChargeableTileEntityLogic logic) {
-                if (facade.ReadTile(logic.Location, TileAccessFlags.None, out var tile)) {
+                if (Universe.ReadTile(logic.Location, TileAccessFlags.None, out var tile)) {
                     if (tile.Configuration.Components.Select<ChargeableComponent>().Any()) {
-                        if (CycleHook.Tags.Contains(logic.Location)) {
+                        if (ClientHook.NameTags.Contains(logic.Location)) {
                             if (NameTag == null) {
                                 NameTag = ClientContext.NameTagRenderer.RegisterNameTag(entity.Id);
                             }
@@ -42,7 +55,7 @@ namespace NimbusFox.PowerAPI.Tiles.Painters {
                 }
 
                 if (entity.Logic is InnerCableTileEntityLogic innerLogic) {
-                    if (CycleHook.Tags.Contains(innerLogic.Location)) {
+                    if (ClientHook.NameTags.Contains(innerLogic.Location)) {
                         if (NameTag == null) {
                             NameTag = ClientContext.NameTagRenderer.RegisterNameTag(entity.Id);
                         }

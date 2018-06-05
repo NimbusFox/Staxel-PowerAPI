@@ -1,0 +1,5 @@
+﻿{
+    "__inherits": "mods/POwer API/TestItems/Switch/SwitchOn.tile",
+    "code": "nimbusfox.powerapi.debug.switch.off",
+    "voxels": "mods/Power API/TestItems/Switch/SwitchOff.qb"
+}

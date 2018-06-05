@@ -1,0 +1,19 @@
+﻿{
+    "__inherits": "mods/Power API/Staxel/Tiles/inherit/wallWrenchable.json",
+    "code": "nimbusfox.powerapi.debug.waterWheel.basic",
+    "kind": "object",
+    "tileStateKind": "staxel.tileState.FrameAnimated",
+    "voxels": "mods/Power API/TestItems/WaterMill/waterwheelWheel.qb",
+    "frameAnimatedTile": {
+        "frameTime": 0.13
+    },
+    "prefetchTileState": true,
+    "useCustomRendering": true,
+    "variants": [
+        "mods/Power API/TestItems/WaterMill/waterwheelWheel.qb",
+        "mods/Power API/TestItems/WaterMill/waterwheelWheel.qb"
+    ],
+    "waterWheel": {
+        "efficency": 30 
+    } 
+}

@@ -1,0 +1,27 @@
+﻿{
+    "__inherits": "mods/Power API/Staxel/Tiles/inherit/wrenchable.json",
+    "code": "nimbusfox.powerapi.debug.waterMill",
+    "isDockacble": false,
+    "tileStateKind": "nimbusfox.powerapi.tileState.generator",
+    "prefetchTileState": true,
+    "kind": "object",
+    "voxels": "mods/Power API/TestItems/WaterMill/waterwheelBody.qb",
+    "wallPushOut": true,
+    "solid": false,
+    "generator": {
+        "maxCharge": 1000000,
+        "transferRate": {
+            "in": 100,
+            "out": 100
+        },
+        "generatePerCycle": 30,
+        "type": "waterMill"
+    },
+    "collision": true,
+    "orientationVariants": true,
+    "priority": 32,
+    "searchable": true,
+    "placementDirection": [
+        "yn"
+    ]
+}

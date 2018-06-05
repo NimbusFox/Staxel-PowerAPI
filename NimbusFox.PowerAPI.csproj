@@ -71,10 +71,15 @@
     <Compile Include="Components\Tiles\Builders\CableTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\ChargeableTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\GeneratorTileComponentBuilder.cs" />
+    <Compile Include="Components\Tiles\Builders\SwitchTileComponentBuilder.cs" />
+    <Compile Include="Components\Tiles\Builders\WaterWheelTileComponentBuilder.cs" />
     <Compile Include="Components\Tiles\Builders\WrenchableTileComponentBuilder.cs" />
     <Compile Include="Components\CableComponent.cs" />
+    <Compile Include="Components\Tiles\SwitchTileComponent.cs" />
+    <Compile Include="Components\Tiles\WaterWheelTileComponent.cs" />
     <Compile Include="Components\WrenchableComponent.cs" />
     <Compile Include="Hooks\BatteryInventoryHook.cs" />
+    <Compile Include="Hooks\ClientHook.cs" />
     <Compile Include="Hooks\CycleHook.cs" />
     <Compile Include="Interfaces\ICycleRun.cs" />
     <Compile Include="Interfaces\ITileWithPower.cs" />
@@ -91,28 +96,36 @@
     <Compile Include="Items\MultiMeterItem.cs" />
     <Compile Include="Items\WrenchItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TileEntities\Builders\SwitchTileEntityBuilder.cs" />
+    <Compile Include="TileEntities\Builders\WaterMillTileEntityBuilder.cs" />
+    <Compile Include="TileEntities\Logic\SwitchTileEntityLogic.cs" />
+    <Compile Include="TileEntities\Logic\WaterMillTileEntityLogic.cs" />
     <Compile Include="TileStates\Builders\ChargeableDockTileStateBuilder.cs" />
     <Compile Include="TileStates\Builders\ChargeableDockTileStateEntityBuilder.cs" />
     <Compile Include="TileStates\Builders\GeneratorTileStateBuilder.cs" />
     <Compile Include="TileStates\Builders\GeneratorTileStateEntityBuilder.cs" />
+    <Compile Include="TileStates\Builders\SwitchTileStateBuilder.cs" />
+    <Compile Include="TileStates\Builders\SwitchTileStateEntityBuilder.cs" />
     <Compile Include="TileStates\Logic\ChargeableTileStateEntityLogic.cs" />
     <Compile Include="TileStates\Logic\GeneratorTileStateEntityLogic.cs" />
-    <Compile Include="Tiles\Builders\ChargeableTileEntityBuilder.cs" />
+    <Compile Include="TileEntities\Builders\ChargeableTileEntityBuilder.cs" />
     <Compile Include="TileStates\Builders\ChargeableTileStateBuilder.cs" />
     <Compile Include="TileStates\Builders\ChargeableTileStateEntityBuilder.cs" />
     <Compile Include="TileStates\DockSites\BatteryDockSite.cs" />
     <Compile Include="TileStates\DockSites\CapacitorDockSite.cs" />
     <Compile Include="TileStates\DockSites\ChargeableDockSite.cs" />
     <Compile Include="TileStates\Logic\ChargeableDockTileStateEntityLogic.cs" />
-    <Compile Include="Tiles\Builders\GeneratorTileEntityBuilder.cs" />
-    <Compile Include="Tiles\Builders\InnerCableTileEntityBuilder.cs" />
-    <Compile Include="Tiles\Builders\SolarPanelTileEntityBuilder.cs" />
-    <Compile Include="Tiles\Logic\ChargeableTileEntityLogic.cs" />
-    <Compile Include="Tiles\Logic\GeneratorTileEntityLogic.cs" />
-    <Compile Include="Tiles\Logic\InnerCableTileEntityLogic.cs" />
-    <Compile Include="Tiles\Logic\SolarPanelTileEntityLogic.cs" />
-    <Compile Include="Tiles\Painters\ChargeableTileEntityPainter.cs" />
-    <Compile Include="Tiles\Painters\SolarPanelTileEntityPainter.cs" />
+    <Compile Include="TileEntities\Builders\GeneratorTileEntityBuilder.cs" />
+    <Compile Include="TileEntities\Builders\InnerCableTileEntityBuilder.cs" />
+    <Compile Include="TileEntities\Builders\SolarPanelTileEntityBuilder.cs" />
+    <Compile Include="TileEntities\Logic\ChargeableTileEntityLogic.cs" />
+    <Compile Include="TileEntities\Logic\GeneratorTileEntityLogic.cs" />
+    <Compile Include="TileEntities\Logic\InnerCableTileEntityLogic.cs" />
+    <Compile Include="TileEntities\Logic\SolarPanelTileEntityLogic.cs" />
+    <Compile Include="TileEntities\Painters\ChargeableTileEntityPainter.cs" />
+    <Compile Include="TileEntities\Painters\InnerCableTileEntityPainter.cs" />
+    <Compile Include="TileEntities\Painters\SolarPanelTileEntityPainter.cs" />
+    <Compile Include="TileStates\Logic\SwitchTileStateEntityLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TileStates\Painters\" />
@@ -149,6 +162,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Staxel\Notifications\PowerInfo.notification">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Staxel\Tiles\inherit\wallWrenchable.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Staxel\Tiles\inherit\wrenchable.json">
@@ -208,6 +224,18 @@
     <None Include="TestItems\SolarPanel\SolarPanel.tile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestItems\Switch\switchOff.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Switch\SwitchOff.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Switch\switchOn.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\Switch\SwitchOn.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestItems\TestBench\TestBench.qb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -238,8 +266,18 @@
     <None Include="TestItems\Capacitor\capacitor1_null.qb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestItems\WaterMill\waterwheelBody.qb" />
-    <None Include="TestItems\WaterMill\waterwheelWheel.qb" />
+    <None Include="TestItems\WaterMill\WaterWheel.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\WaterMill\waterwheelBody.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\WaterMill\WaterWheelBody.tile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestItems\WaterMill\waterwheelWheel.qb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Translations\NimbusFox.PowerAPI-EN-GB.lang">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

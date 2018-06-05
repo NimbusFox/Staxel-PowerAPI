@@ -3,48 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NimbusFox.PowerAPI.Classes;
-using NimbusFox.PowerAPI.Interfaces;
+using NimbusFox.PowerAPI.Components.Tiles;
 using NimbusFox.PowerAPI.TileEntities.Builders;
 using NimbusFox.PowerAPI.TileEntities.Logic;
-using NimbusFox.PowerAPI.TileStates.Builders;
 using Plukit.Base;
 using Staxel;
 using Staxel.Items;
 using Staxel.Logic;
-using Staxel.Rendering;
 using Staxel.Tiles;
 using Staxel.TileStates;
 
 namespace NimbusFox.PowerAPI.TileStates.Logic {
-    public class ChargeableTileStateEntityLogic : TileStateEntityLogic {
+    public class SwitchTileStateEntityLogic : TileStateEntityLogic {
 
         private EntityId _logicOwner = EntityId.NullEntityId;
-        private bool _despawn;
         public TileConfiguration Configuration;
 
-        public ChargeableTileStateEntityLogic(Entity entity) : base(entity) {
+        public TileConfiguration On { get; private set; }
+        public TileConfiguration Off { get; private set; }
+
+        public SwitchTileStateEntityLogic(Entity entity) : base(entity) {
             Entity.Physics.PriorityChunkRadius(0, false);
         }
-        public override void PreUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
-        }
+        public override void PreUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) { }
 
         public override void Update(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
         }
-
-        public override void PostUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) {
-        }
-
+        public override void PostUpdate(Timestep timestep, EntityUniverseFacade entityUniverseFacade) { }
         public override void Construct(Blob arguments, EntityUniverseFacade entityUniverseFacade) {
-            _despawn = arguments.GetBool("despawn", false);
             Location = arguments.FetchBlob("location").GetVector3I();
             Configuration = GameContext.TileDatabase.GetTileConfiguration(arguments.GetString("tile"));
             if (_logicOwner == EntityId.NullEntityId) {
+
+                if (Configuration.Components.Contains<SwitchTileComponent>()) {
+                    var components = Configuration.Components.Get<SwitchTileComponent>();
+
+                    On = GameContext.TileDatabase.GetTileConfiguration(components.On);
+                    Off = GameContext.TileDatabase.GetTileConfiguration(components.Off);
+                }
+
                 var blob = BlobAllocator.Blob(true);
 
                 blob.SetString("tile", Configuration.Code);
                 blob.FetchBlob("location").SetVector3I(Location);
-                blob.SetBool("ignoreSpawn", _despawn);
 
                 var entities = new Lyst<Entity>();
 
@@ -53,7 +54,7 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
                         return false;
                     }
 
-                    if (entity.Logic is ChargeableTileEntityLogic logic) {
+                    if (entity.Logic is SwitchTileEntityLogic logic) {
                         return Location == logic.Location;
                     }
 
@@ -65,23 +66,29 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
                 if (tileEntity != default(Entity)) {
                     _logicOwner = tileEntity.Id;
                 } else {
-
-                    _logicOwner = ChargeableTileEntityBuilder.Spawn(Location, blob, entityUniverseFacade).Id;
+                    _logicOwner = SwitchTileEntityBuilder.Spawn(Location, blob, entityUniverseFacade).Id;
                 }
-
             }
         }
         public override void Bind() { }
         public override bool Interactable() {
-            return !Configuration.InteractActionTrigger.IsNullOrEmpty();
+            return true;
         }
 
         public override void Interact(Entity entity, EntityUniverseFacade facade, ControlState main, ControlState alt) {
-            if (!alt.DownClick) {
-                return;
+            if (alt.DownClick) {
+                if (facade.ReadTile(Location, TileAccessFlags.SynchronousWait, out var tile)) {
+                    facade.DirectWriteTile(Location,
+                        tile.Configuration == On ? Off.MakeTile(tile.Variant()) : On.MakeTile(tile.Variant()),
+                        TileAccessFlags.SynchronousWait);
+                }
             }
-            entity.PlayerEntityLogic.NextAction(Configuration.InteractActionTrigger);
         }
+
+        public override string AltInteractVerb() {
+            return "nimbusfox.powerapi.verb.switch";
+        }
+
         public override bool CanChangeActiveItem() {
             return false;
         }
@@ -94,44 +101,10 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
             return false;
         }
 
-        public override void KeepAlive() {
-            
-        }
-
-        public override void BeingLookedAt(Entity entity) {
-            KeepAlive();
-        }
+        public override void KeepAlive() { }
+        public override void BeingLookedAt(Entity entity) { }
         public override bool IsBeingLookedAt() {
             return false;
-        }
-
-        public EntityId GetOwner() {
-            return _logicOwner;
-        }
-
-        public void SetOwner(Entity tileEntity) {
-            _logicOwner = tileEntity.Id;
-        }
-
-        public override void UpdateWithData(Blob blob) {
-            _logicOwner = blob.GetLong("owner", 0L);
-            if (_logicOwner == EntityId.NullEntityId) {
-                return;
-            }
-
-            Configuration = GameContext.TileDatabase.GetTileConfiguration(blob.GetString("tile"));
-        }
-
-        public override void StorePersistenceData(Blob data) {
-            base.StorePersistenceData(data);
-            data.SetLong("logicOwner", _logicOwner.Id);
-            data.SetBool("despawn", _despawn);
-        }
-
-        public override void RestoreFromPersistedData(Blob data, EntityUniverseFacade facade) {
-            base.RestoreFromPersistedData(data, facade);
-            _logicOwner = (EntityId) data.GetLong("logicOwner", 0L);
-            _despawn = data.GetBool("despawn", false);
         }
     }
 }

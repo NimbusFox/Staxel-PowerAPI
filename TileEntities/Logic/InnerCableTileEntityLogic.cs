@@ -6,10 +6,20 @@ using System.Threading.Tasks;
 using NimbusFox.PowerAPI.Components;
 using Plukit.Base;
 using Staxel;
+using Staxel.Entities;
+using Staxel.Items;
 using Staxel.Logic;
+using Staxel.Tiles;
 
-namespace NimbusFox.PowerAPI.Tiles.Logic {
+namespace NimbusFox.PowerAPI.TileEntities.Logic {
     public class InnerCableTileEntityLogic : ChargeableTileEntityLogic {
+
+        private bool _canTransferPower = true;
+
+        public override bool OutputToTiles => _canTransferPower && base.OutputToTiles;
+
+        public override bool InputFromTiles => _canTransferPower && base.InputFromTiles;
+
         public InnerCableTileEntityLogic(Entity entity) : base(entity) { }
 
         public override void Construct(Blob arguments, EntityUniverseFacade entityUniverseFacade) {
@@ -53,15 +63,25 @@ namespace NimbusFox.PowerAPI.Tiles.Logic {
 
             Universe = entityUniverseFacade;
 
-            var config = GameContext.TileDatabase.GetTileConfiguration(Tile);
-            if (config.Components.Select<ChargeableComponent>().Any()) {
-                TilePower.GetPowerFromComponent(config.Components.Select<ChargeableComponent>().First());
-            } else {
-                entityUniverseFacade.RemoveEntity(Entity.Id);
-                return;
+            if (entityUniverseFacade.ReadTile(Location, TileAccessFlags.SynchronousWait, out var tile)) {
+                var config = GameContext.TileDatabase.GetTileConfiguration(Tile);
+                if (config.Components.Select<ChargeableComponent>().Any() && tile.Configuration.Code != "staxel.tile.Sky") {
+                    TilePower.GetPowerFromComponent(config.Components.Select<ChargeableComponent>().First());
+                } else {
+                    var itemBlob = BlobAllocator.Blob(true);
+                    itemBlob.SetString("kind", "staxel.item.Placer");
+                    itemBlob.SetString("tile", Tile);
+                    var item = GameContext.ItemDatabase.SpawnItemStack(itemBlob, null);
+                    ItemEntityBuilder.SpawnDroppedItem(Entity, entityUniverseFacade, item, Entity.Physics.Position, new Vector3D(0, 1, 0), Vector3D.Zero, SpawnDroppedFlags.None);
+                    entityUniverseFacade.RemoveEntity(Entity.Id);
+                    return;
+                }
+                Cycle.RunCycle(RunCycle);
             }
+        }
 
-            Cycle.RunCycle(RunCycle);
+        public void PowerState(bool transfer) {
+            _canTransferPower = transfer;
         }
     }
 }

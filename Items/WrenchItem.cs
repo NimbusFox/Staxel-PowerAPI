@@ -7,7 +7,7 @@ using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items.Builders;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileEntities.Logic;
 using NimbusFox.PowerAPI.TileStates.Logic;
 using Plukit.Base;
 using Staxel;

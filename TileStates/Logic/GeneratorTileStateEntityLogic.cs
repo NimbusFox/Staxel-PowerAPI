@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NimbusFox.PowerAPI.Components;
-using NimbusFox.PowerAPI.Tiles.Builders;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileEntities.Builders;
+using NimbusFox.PowerAPI.TileEntities.Logic;
 using Plukit.Base;
 using Staxel;
 using Staxel.Logic;
@@ -62,6 +62,8 @@ namespace NimbusFox.PowerAPI.TileStates.Logic {
 
                         if (component.Type == "solar") {
                             _logicOwner = ChargeableTileEntityBuilder.Spawn(Location, blob, entityUniverseFacade, SolarPanelTileEntityBuilder.KindCode).Id;
+                        } else if (component.Type == "waterMill") {
+                            _logicOwner = ChargeableTileEntityBuilder.Spawn(Location, blob, entityUniverseFacade, WaterMillTileEntityBuilder.KindCode).Id;
                         }
                     }
                 }

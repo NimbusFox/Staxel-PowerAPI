@@ -10,7 +10,7 @@ using Staxel;
 using Staxel.Items;
 using Staxel.Logic;
 
-namespace NimbusFox.PowerAPI.Tiles.Logic {
+namespace NimbusFox.PowerAPI.TileEntities.Logic {
     public class GeneratorTileEntityLogic : ChargeableTileEntityLogic {
         public GeneratorTileEntityLogic(Entity entity) : base(entity) { }
 

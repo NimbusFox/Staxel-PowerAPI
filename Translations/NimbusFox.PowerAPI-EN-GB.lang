@@ -12,6 +12,7 @@ nimbusfox.powerapi.verb.insert=Insert
 nimbusfox.powerapi.verb.extract=Extract
 nimbusfox.powerapi.verb.changeCable=Cable
 nimbusfox.powerapi.verb.none=None
+nimbusfox.powerapi.verb.switch=switch
 
 nimbusfox.powerapi.notifications.powerInformation.text=Watts: {0}/{1}
 nimbusfox.powerapi.notifications.lightInformation.text=Light:{0} Phase:{1} Reduction:{2}

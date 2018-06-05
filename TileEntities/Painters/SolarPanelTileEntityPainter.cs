@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Hooks;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileEntities.Logic;
 using Plukit.Base;
 using Staxel;
 using Staxel.Client;
@@ -15,7 +15,7 @@ using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Rendering;
 
-namespace NimbusFox.PowerAPI.Tiles.Painters {
+namespace NimbusFox.PowerAPI.TileEntities.Painters {
     public class SolarPanelTileEntityPainter : ChargeableTileEntityPainter {
 
         private NameTag _efficienyTag;
@@ -27,7 +27,7 @@ namespace NimbusFox.PowerAPI.Tiles.Painters {
             if (entity.Logic is SolarPanelTileEntityLogic logic) {
                 if (facade.ReadTile(logic.Location, TileAccessFlags.None, out var tile)) {
                     if (tile.Configuration.Components.Select<ChargeableComponent>().Any()) {
-                        if (CycleHook.Tags.Contains(logic.Location)) {
+                        if (ClientHook.NameTags.Contains(logic.Location)) {
                             if (NameTag == null) {
                                 NameTag = ClientContext.NameTagRenderer.RegisterNameTag(entity.Id);
                             }

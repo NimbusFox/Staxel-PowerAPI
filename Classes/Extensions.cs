@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Reflection;
 using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileEntities.Logic;
 using NimbusFox.PowerAPI.TileStates.Logic;
 using Plukit.Base;
 using Staxel;

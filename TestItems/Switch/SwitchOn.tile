@@ -1,0 +1,14 @@
+﻿{
+    "__inherits": "mods/Power API/Staxel/Tiles/inherit/wallWrenchable.json",
+    "code": "nimbusfox.powerapi.debug.switch.on",
+    "tileStateKind": "nimbusfox.powerapi.tileState.switch",
+    "kind": "object",
+    "voxels": "mods/Power API/TestItems/Switch/SwitchOn.qb",
+    "prefetchTileState": true,
+    "oritentationVariants": true,
+    "searcable": true,
+    "switch": {
+        "on": "nimbusfox.powerapi.debug.switch.on",
+        "off": "nimbusfox.powerapi.debug.switch.off"
+    }
+}

@@ -3,32 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NimbusFox.PowerAPI.Tiles.Logic;
-using NimbusFox.PowerAPI.Tiles.Painters;
+using NimbusFox.PowerAPI.TileEntities.Logic;
+using NimbusFox.PowerAPI.TileEntities.Painters;
 using Plukit.Base;
 using Staxel.Logic;
-using Staxel.Tiles;
 using Staxel.TileStates;
 
-namespace NimbusFox.PowerAPI.Tiles.Builders {
-    public class ChargeableTileEntityBuilder : IEntityPainterBuilder, IEntityLogicBuilder2, IEntityLogicBuilder {
+namespace NimbusFox.PowerAPI.TileEntities.Builders {
+    public class SwitchTileEntityBuilder : IEntityPainterBuilder, IEntityLogicBuilder2, IEntityLogicBuilder {
         public virtual string Kind => KindCode;
 
-        public static string KindCode => "nimbusfox.powerapi.entity.tile.chargeable";
+        public static string KindCode => "nimbusfox.powerapi.entity.tile.switch";
 
         EntityLogic IEntityLogicBuilder.Instance(Entity entity, bool server) {
-            return new ChargeableTileEntityLogic(entity);
+            return new SwitchTileEntityLogic(entity);
         }
 
         EntityPainter IEntityPainterBuilder.Instance() {
-            return new ChargeableTileEntityPainter();
+            return new BasicTileStateEntityPainter();
         }
 
-        public static Entity Spawn(Vector3I position, Blob config, EntityUniverseFacade universe, string kind = "nimbusfox.powerapi.entity.tile.chargeable") {
-            var entity = new Entity(universe.AllocateNewEntityId(), false, kind, true);
+        public static Entity Spawn(Vector3I position, Blob config, EntityUniverseFacade universe) {
+            var entity = new Entity(universe.AllocateNewEntityId(), false, KindCode, true);
 
             var blob = BlobAllocator.Blob(true);
-            blob.SetString("kind", kind);
+            blob.SetString("kind", KindCode);
             blob.FetchBlob("position").SetVector3D(position.ToTileCenterVector3D());
             blob.FetchBlob("location").SetVector3I(position);
             blob.FetchBlob("velocity").SetVector3D(Vector3D.Zero);

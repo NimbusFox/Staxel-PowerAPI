@@ -7,8 +7,8 @@ using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components;
 using NimbusFox.PowerAPI.Components.Tiles;
 using NimbusFox.PowerAPI.Items.Builders;
-using NimbusFox.PowerAPI.Tiles.Builders;
-using NimbusFox.PowerAPI.Tiles.Logic;
+using NimbusFox.PowerAPI.TileEntities.Builders;
+using NimbusFox.PowerAPI.TileEntities.Logic;
 using Plukit.Base;
 using Staxel;
 using Staxel.Entities;
@@ -159,7 +159,7 @@ namespace NimbusFox.PowerAPI.Items {
 
         public override void Restore(ItemConfiguration configuration, Blob blob) {
             base.Restore(configuration, blob);
-            _targetCode = blob.GetString("targetCode", "");
+            _targetCode = blob.GetString("targetCode", _targetCode);
             if (int.TryParse(blob.GetLong("slot", 0).ToString(), out var slot)) {
                 _slot = slot;
             }

@@ -7,7 +7,7 @@ using NimbusFox.PowerAPI.Classes;
 using Plukit.Base;
 using Staxel.Logic;
 
-namespace NimbusFox.PowerAPI.Tiles.Logic {
+namespace NimbusFox.PowerAPI.TileEntities.Logic {
     public class SolarPanelTileEntityLogic : GeneratorTileEntityLogic {
         public SolarPanelTileEntityLogic(Entity entity) : base(entity) { }
 

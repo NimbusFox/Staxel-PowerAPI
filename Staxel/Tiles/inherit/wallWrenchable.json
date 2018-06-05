@@ -1,0 +1,5 @@
+﻿{
+    "__inherits": "staxel/tileObject/walllight.config",
+    "wrenchable": {},
+    "placeSoundGroup": "staxel.sounds.place.Stone"
+}
