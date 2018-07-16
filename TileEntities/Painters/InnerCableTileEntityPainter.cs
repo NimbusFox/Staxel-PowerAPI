@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NimbusFox.PowerAPI.Hooks;
+﻿using NimbusFox.PowerAPI.Hooks;
 using NimbusFox.PowerAPI.TileEntities.Logic;
 using Plukit.Base;
 using Staxel;
 using Staxel.Client;
 using Staxel.Core;
-using Staxel.Draw;
-using Staxel.Effects;
 using Staxel.Logic;
-using Staxel.Rendering;
 
 namespace NimbusFox.PowerAPI.TileEntities.Painters {
     public class InnerCableTileEntityPainter : ChargeableTileEntityPainter {

@@ -1,6 +1,5 @@
 ﻿using NimbusFox.PowerAPI.Classes;
 using Plukit.Base;
-using Staxel.Rendering;
 
 namespace NimbusFox.PowerAPI.Interfaces {
     public interface ITileWithPower : ICycleRun {

@@ -1,0 +1,8 @@
+﻿{
+    "__inherits": "staxel/tileObject/ceilinglight.confg",
+    "code": "nimbusfox.powerapi.debug.ceilingLight",
+    "emissiveColor": "ffffff96",
+    "light": 2.2,
+    "searchable": true,
+    "voxels": "staxel/tileObject/serverVillage/CeilingLamp.qb"
+}

@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NimbusFox.PowerAPI.Classes;
 using NimbusFox.PowerAPI.Components;
 using Plukit.Base;
-using Staxel;
 using Staxel.Items;
 using Staxel.Logic;
 

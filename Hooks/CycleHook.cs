@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using NimbusFox.PowerAPI.Classes;
-using NimbusFox.PowerAPI.Interfaces;
 using NimbusFox.PowerAPI.Items;
-using NimbusFox.PowerAPI.TileEntities.Logic;
 using Plukit.Base;
-using Staxel;
-using Staxel.Client;
-using Staxel.Core;
 using Staxel.Items;
 using Staxel.Logic;
 using Staxel.Modding;
-using Staxel.Rendering;
 using Staxel.Tiles;
 
 namespace NimbusFox.PowerAPI.Hooks {

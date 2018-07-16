@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NimbusFox.PowerAPI.Components;
-using NimbusFox.PowerAPI.Hooks;
-using NimbusFox.PowerAPI.TileStates.Logic;
+﻿using NimbusFox.PowerAPI.TileStates.Logic;
 using Plukit.Base;
 using Staxel.Logic;
-using Staxel.Rendering;
 using Staxel.Tiles;
 using Staxel.TileStates;
-using Staxel.TileStates.Docks;
 
 namespace NimbusFox.PowerAPI.TileStates.Builders {
     public class ChargeableTileStateEntityBuilder : IEntityPainterBuilder, IEntityLogicBuilder2, IEntityLogicBuilder {

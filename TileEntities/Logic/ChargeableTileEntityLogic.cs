@@ -9,7 +9,6 @@ using Staxel;
 using Staxel.Core;
 using Staxel.Items;
 using Staxel.Logic;
-using Staxel.Rendering;
 
 namespace NimbusFox.PowerAPI.TileEntities.Logic {
     public class ChargeableTileEntityLogic : EntityLogic, ITileWithPower {

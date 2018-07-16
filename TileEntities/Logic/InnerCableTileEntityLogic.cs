@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using NimbusFox.PowerAPI.Components;
 using Plukit.Base;
 using Staxel;
 using Staxel.Entities;
 using Staxel.Items;
 using Staxel.Logic;
-using Staxel.Tiles;
 
 namespace NimbusFox.PowerAPI.TileEntities.Logic {
     public class InnerCableTileEntityLogic : ChargeableTileEntityLogic {

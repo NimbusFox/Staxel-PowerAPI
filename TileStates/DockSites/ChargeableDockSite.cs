@@ -4,7 +4,6 @@ using Staxel;
 using Staxel.Docks;
 using Staxel.Effects;
 using Staxel.Logic;
-using Staxel.Player;
 using Staxel.TileStates.Docks;
 
 namespace NimbusFox.PowerAPI.TileStates.DockSites {

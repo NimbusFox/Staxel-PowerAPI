@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NimbusFox.PowerAPI.TileEntities.Logic;
+﻿using NimbusFox.PowerAPI.TileEntities.Logic;
 using NimbusFox.PowerAPI.TileEntities.Painters;
 using Plukit.Base;
-using Staxel;
-using Staxel.Items;
 using Staxel.Logic;
 
 namespace NimbusFox.PowerAPI.TileEntities.Builders {
