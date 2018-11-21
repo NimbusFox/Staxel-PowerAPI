@@ -76,7 +76,7 @@ namespace NimbusFox.PowerAPI.TileEntities.Painters {
             Timestep renderTimestep) {
         }
 
-        public override void Render(DeviceContext graphics, Matrix4F matrix, Vector3D renderOrigin, Entity entity,
+        public override void Render(DeviceContext graphics, ref Matrix4F matrix, Vector3D renderOrigin, Entity entity,
             AvatarController avatarController, Timestep renderTimestep, RenderMode renderMode) { }
 
         public override void StartEmote(Entity entity, Timestep renderTimestep, EmoteConfiguration emote) { }
